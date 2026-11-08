@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>enharmonic test</title>
+<style>
+html,body{margin:0;height:100%;background:#fff;color:#111;font-family:"Noto Sans KR",sans-serif}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+button{font:inherit;padding:10px 22px;border:1px solid #111;background:#fff;cursor:pointer}
+button:active{background:#111;color:#fff}
+#s{font-size:13px;color:#555}
+</style></head><body>
+<div>♯ ♭ 테스트 페이지</div>
+<button id="b">누르기</button>
+<div id="s">스크립트 대기 중… (이 글자가 안 바뀌면 스크립트가 막힌 것)</div>
+<script>
+var n=0,s=document.getElementById('s');
+s.textContent='스크립트 작동 중 ✓ 아직 안 눌렀어요';
+document.getElementById('b').onclick=function(){n++;s.textContent='스크립트 작동 중 ✓ '+n+'번 눌림'};
+</script></body></html>
