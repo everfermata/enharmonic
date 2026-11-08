@@ -23,7 +23,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--paper);color:var
 #field{position:relative;flex:1;overflow:hidden;
   background:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--line) 31px,var(--line) 32px)}
 #ground{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--ink)}
-#groundlab{position:absolute;right:10px;bottom:8px;font-family:var(--dot);font-size:10px;color:var(--mute);letter-spacing:.2em}
 .w{position:absolute;top:0;left:0;white-space:nowrap;font-family:var(--mincho);font-weight:800;font-size:17px;line-height:1;
   padding:6px 10px;background:var(--paper);border:1px solid var(--ink);will-change:transform}
 .w.hit{border-color:var(--line);color:var(--mute);text-decoration:line-through;transition:opacity .35s;opacity:0}
@@ -56,7 +55,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--paper);color:var
     <span id="lives" aria-label="목숨"></span>
   </div>
   <div id="field">
-    <div id="ground"></div><div id="groundlab">TERRA</div>
+    <div id="ground"></div>
     <div class="scr" id="start">
       <div class="sub">PASSWORD</div>
       <h1>合言葉</h1>
@@ -109,7 +108,7 @@ var CONFIG = {
 /* ====================================================== */
 (function(){
   var $=function(i){return document.getElementById(i)};
-  var field=$('field'),txt=$('txt'),scoreEl=$('score'),livesEl=$('lives');
+  var field=$('field'),txt=$('txt'),form=$('in'),scoreEl=$('score'),livesEl=$('lives');
   var FLAT='<svg viewBox="0 0 14 22" aria-hidden="true"><path d="M3 0v18.5M3 12.5c3-3 9-2 9 2.3 0 3-4 5.2-9 5.2" fill="none" stroke="#111" stroke-width="1.8"/></svg>';
   var words=[],score=0,lives=0,running=false,last=0,nextSpawn=0,cleared=0,raf=0,lastCol=-1;
   var best=0;
@@ -164,12 +163,20 @@ var CONFIG = {
     score++;cleared++;scoreEl.textContent=score;
     return true;
   }
+  /* 입력칸을 새것으로 바꿔요. 한글은 마지막 글자가 '조합 중'이라 value만 비우면 마지막 글자('해')가 다시 살아나는데,
+     입력칸 자체를 새로 만들면 그 찌꺼기가 사라집니다. */
+  function resetInput(shake){
+    var n=txt.cloneNode(false);n.value='';n.removeAttribute('class');
+    txt.parentNode.replaceChild(n,txt);txt=n;
+    if(shake){void txt.offsetWidth;txt.classList.add('shake')}
+    try{txt.focus({preventScroll:true})}catch(e){txt.focus()}
+  }
   function norm(s){return (s||'').normalize('NFC').replace(/\s+/g,'')}
   function submit(){
     if(!running)return;
     var v=norm(txt.value);
-    if(v===norm(CONFIG.answer)){clearLowest();txt.value=''}
-    else if(v){txt.classList.remove('shake');void txt.offsetWidth;txt.classList.add('shake');txt.value=''}
+    if(v===norm(CONFIG.answer)){clearLowest();resetInput(false)}
+    else if(v){resetInput(true)}
   }
   function end(){
     running=false;cancelAnimationFrame(raf);
@@ -184,14 +191,14 @@ var CONFIG = {
     words=[];score=0;cleared=0;lives=CONFIG.lives;last=0;nextSpawn=0;lastCol=-1;
     scoreEl.textContent='0';drawLives();
     $('start').hidden=true;$('end').hidden=true;
-    txt.value='';running=true;
-    try{txt.focus({preventScroll:true})}catch(e){txt.focus()}
+    running=true;resetInput(false);
     raf=requestAnimationFrame(tick);
   }
   $('startBtn').addEventListener('click',start);
   $('again').addEventListener('click',start);
   $('in').addEventListener('submit',function(e){e.preventDefault();submit()});
-  txt.addEventListener('input',function(){
+  form.addEventListener('input',function(e){
+    if(e.target!==txt)return;
     if(CONFIG.autoSubmit&&norm(txt.value)===norm(CONFIG.answer))submit();
   });
   /* 붙여넣기·드래그·우클릭 가볍게 막기 (일본어 복사 방지) */
