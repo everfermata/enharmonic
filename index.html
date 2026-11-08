@@ -79,6 +79,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--paper);color:var
 <script>
 /* ============ 설정 (여기만 고치면 됩니다) ============ */
 var CONFIG = {
+  sound: true,           // 효과음. 끄려면 false (게임 시작 / '사랑해'로 말이 사라질 때)
+  soundVolume: 0.35,     // 효과음 크기 0~1
   answer: '사랑해',      // 정답 글자. 이걸 입력해야 말이 사라져요
   lives: 3,              // 목숨(♭) 개수
   startSpeed: 38,        // 처음 떨어지는 속도 (px/초). 클수록 빠름
@@ -135,6 +137,25 @@ var CONFIG = {
     el.style.transform='translate('+x+'px,'+o.y+'px)';
     words.push(o);
   }
+  /* 효과음: 소리 파일 없이 브라우저가 직접 만들어요 (Web Audio). 시작/정답일 때만 울립니다 */
+  var AC=null;
+  function note(f,t0,dur,vol,type){
+    var o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+t0;
+    o.type=type||'sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol*CONFIG.soundVolume,t+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur+0.05);
+  }
+  function sfx(kind){
+    if(!CONFIG.sound)return;
+    try{
+      if(!AC){var C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C()}
+      if(AC.state==='suspended')AC.resume();
+      if(kind==='start'){note(523.25,0,0.35,0.9);note(783.99,0.11,0.5,0.9)}          /* 도 → 솔 */
+      else if(kind==='clear'){note(1318.5,0,0.28,0.8,'triangle');note(1975.5,0.07,0.45,0.6)} /* 맑은 두 음 */
+    }catch(e){}
+  }
   function lose(o){
     lives--;drawLives();
     o.el.classList.add('miss');
@@ -161,6 +182,7 @@ var CONFIG = {
     o.el.classList.add('hit');
     setTimeout(function(){if(o.el.parentNode)o.el.parentNode.removeChild(o.el)},380);
     score++;cleared++;scoreEl.textContent=score;
+    sfx('clear');
     return true;
   }
   /* 입력칸을 새것으로 바꿔요. 한글은 마지막 글자가 '조합 중'이라 value만 비우면 마지막 글자('해')가 다시 살아나는데,
@@ -191,7 +213,7 @@ var CONFIG = {
     words=[];score=0;cleared=0;lives=CONFIG.lives;last=0;nextSpawn=0;lastCol=-1;
     scoreEl.textContent='0';drawLives();
     $('start').hidden=true;$('end').hidden=true;
-    running=true;resetInput(false);
+    running=true;sfx('start');resetInput(false);
     raf=requestAnimationFrame(tick);
   }
   $('startBtn').addEventListener('click',start);
