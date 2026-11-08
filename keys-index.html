@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>鍵盤</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;800&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap');
+html,body{margin:0;background:transparent;-webkit-text-size-adjust:100%}
+.kb{--ink:#111;--sub:#555;--pa:#fff;position:relative;color:var(--ink);font-family:'Zen Kaku Gothic New','Noto Sans KR',sans-serif;padding:6px 8px 8px 2px}
+.kb input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.pn{border:1px solid var(--ink);background:var(--pa);box-shadow:5px 5px 0 var(--pa),6px 6px 0 var(--ink);margin-bottom:22px}
+.p{display:none;grid-template-columns:150px 1fr;align-items:center;gap:18px;padding:18px 20px;animation:pin .35s ease-out}
+@keyframes pin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.s{position:relative;height:84px;background:repeating-linear-gradient(to bottom,var(--ink) 0 1px,transparent 1px 10px) 0 14px/100% 41px no-repeat}
+.s::before,.s::after{content:"";position:absolute;top:14px;width:1px;height:41px;background:var(--ink)}
+.s::before{left:0}.s::after{right:0}
+.o{position:absolute;bottom:calc(29px + var(--s)*5px);width:13px;height:10px;margin-bottom:-5px;border-radius:50%;background:var(--ink);transform:rotate(-20deg)}
+.o.l{left:38px}.o.r{right:30px}.o.c{left:50%;margin-left:-5px}
+.o b{position:absolute;right:17px;top:50%;transform:translateY(-52%) rotate(20deg);font:400 21px/1 'Shippori Mincho B1',serif}
+.o.x::after{content:"";position:absolute;left:-6px;top:4.5px;width:25px;height:1px;background:var(--ink);transform:rotate(20deg)}
+.o.y::after{content:"";position:absolute;left:-6px;top:-.5px;width:25px;height:1px;background:var(--ink);transform:rotate(20deg)}
+.t{min-width:0}
+.m{font:800 34px/1.1 'Shippori Mincho B1',serif;letter-spacing:.02em;white-space:nowrap}
+.m i{font-style:normal;font-weight:400;color:var(--sub);margin:0 .25em}
+.g{display:flex;gap:14px;margin:6px 0 10px;font-size:12px;letter-spacing:.12em;color:var(--sub)}
+.g:empty{margin:4px 0}
+.q{font:400 15px/1.6 'Shippori Mincho B1',serif;margin:0;word-break:keep-all}
+.ks{position:relative;display:flex;height:150px;border-top:3px solid var(--ink)}
+.ks label{cursor:pointer;-webkit-tap-highlight-color:transparent;transform-origin:top;transition:background .12s,transform .12s}
+.w{position:relative;flex:1;border:1px solid var(--ink);border-top:0;margin-left:-1px;background:var(--pa)}
+.w:first-child{margin-left:0}
+.w:hover{background:#f4f4f4}
+.w span{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:400 12px/1 'Shippori Mincho B1',serif;color:var(--sub)}
+.bk{position:absolute;top:0;width:9%;height:60%;margin-left:-4.5%;background:var(--ink);border-radius:0 0 2px 2px;z-index:2}
+.bk:hover{background:#333}
+.w:has(:checked){background:#e6e6e6;transform:scaleY(.985)}
+.bk:has(:checked){background:#4a4a4a;transform:scaleY(.97)}
+.ks label:has(:focus-visible){outline:2px solid #888;outline-offset:-4px}
+.ks label:has(:checked)::after{content:"\266A";position:absolute;left:50%;bottom:26px;font:400 16px/1 'Shippori Mincho B1',serif;color:#888;animation:fly .9s ease-out forwards;pointer-events:none}
+@keyframes fly{0%{opacity:0;transform:translate(-50%,6px)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-34px)}}
+@media (max-width:440px){.p{grid-template-columns:1fr;gap:10px;padding:16px}.s{max-width:170px}.m{font-size:28px}.ks{height:120px}.w span{display:none}}
+@media (prefers-reduced-motion:reduce){.p,.ks label:has(:checked)::after{animation:none}.ks label:has(:checked)::after{opacity:0}}
+.kb:has(#na:checked) .pa,.kb:has(#nb:checked) .pb,.kb:has(#nc:checked) .pc,.kb:has(#nd:checked) .pd,.kb:has(#ne:checked) .pe,.kb:has(#nf:checked) .pf,.kb:has(#ng:checked) .pg,.kb:has(#nh:checked) .ph,.kb:has(#ni:checked) .pi,.kb:has(#nj:checked) .pj,.kb:has(#nk:checked) .pk,.kb:has(#nl:checked) .pl{display:grid}
+</style>
+</head>
+<body>
+<div class="kb">
+<div class="pn">
+<div class="p pa"><div class="s"><i class="o l x" style="--s:-2"></i><i class="o r y" style="--s:-3"><b>♯</b></i></div><div class="t"><div class="m">C<i>＝</i>B♯</div><div class="g"><span>♯ 澪</span></div><p class="q">始まりの音。下から来れば B♯ と呼ばれる</p></div></div>
+<div class="p pb"><div class="s"><i class="o l x" style="--s:-2"><b>♯</b></i><i class="o r" style="--s:-1"><b>♭</b></i></div><div class="t"><div class="m">C♯<i>＝</i>D♭</div><div class="g"><span>♯ 澪</span><span>♭ 永遠</span></div><p class="q">同じ音。呼ぶ名前だけが違う</p></div></div>
+<div class="p pc"><div class="s"><i class="o c" style="--s:-1"></i></div><div class="t"><div class="m">D<i>♮</i></div><div class="g"></div><p class="q">名前はひとつだけ</p></div></div>
+<div class="p pd"><div class="s"><i class="o l" style="--s:-1"><b>♯</b></i><i class="o r" style="--s:0"><b>♭</b></i></div><div class="t"><div class="m">D♯<i>＝</i>E♭</div><div class="g"><span>♯ 澪</span><span>♭ 永遠</span></div><p class="q">上から来たか、下から来たか</p></div></div>
+<div class="p pe"><div class="s"><i class="o l" style="--s:0"></i><i class="o r" style="--s:1"><b>♭</b></i></div><div class="t"><div class="m">E<i>＝</i>F♭</div><div class="g"><span>♭ 永遠</span></div><p class="q">隣にいるのに、あいだに黒鍵がない</p></div></div>
+<div class="p pf"><div class="s"><i class="o l" style="--s:1"></i><i class="o r" style="--s:0"><b>♯</b></i></div><div class="t"><div class="m">F<i>＝</i>E♯</div><div class="g"><span>♯ 澪</span></div><p class="q">越えてしまえば、同じ場所</p></div></div>
+<div class="p pg"><div class="s"><i class="o l" style="--s:1"><b>♯</b></i><i class="o r" style="--s:2"><b>♭</b></i></div><div class="t"><div class="m">F♯<i>＝</i>G♭</div><div class="g"><span>♯ 澪</span><span>♭ 永遠</span></div><p class="q">鍵盤のちょうど真ん中</p></div></div>
+<div class="p ph"><div class="s"><i class="o c" style="--s:2"></i></div><div class="t"><div class="m">G<i>♮</i></div><div class="g"></div><p class="q">まっすぐな音</p></div></div>
+<div class="p pi"><div class="s"><i class="o l" style="--s:2"><b>♯</b></i><i class="o r" style="--s:3"><b>♭</b></i></div><div class="t"><div class="m">G♯<i>＝</i>A♭</div><div class="g"><span>♯ 澪</span><span>♭ 永遠</span></div><p class="q">澪は♯で、永遠は♭で書く</p></div></div>
+<div class="p pj"><div class="s"><i class="o c" style="--s:3"></i></div><div class="t"><div class="m">A<i>♮</i></div><div class="g"></div><p class="q">調律の基準 — 440Hz</p></div></div>
+<div class="p pk"><div class="s"><i class="o l" style="--s:3"><b>♯</b></i><i class="o r" style="--s:4"><b>♭</b></i></div><div class="t"><div class="m">A♯<i>＝</i>B♭</div><div class="g"><span>♯ 澪</span><span>♭ 永遠</span></div><p class="q">黒鍵は、ふたりで一本</p></div></div>
+<div class="p pl"><div class="s"><i class="o l" style="--s:4"></i><i class="o r" style="--s:5"><b>♭</b></i></div><div class="t"><div class="m">B<i>＝</i>C♭</div><div class="g"><span>♭ 永遠</span></div><p class="q">次の C の、すこし手前</p></div></div>
+</div><div class="ks">
+<label class="w"><input type="radio" name="k" id="na" aria-label="C"><span>C</span></label>
+<label class="w"><input type="radio" name="k" id="nc" aria-label="D"><span>D</span></label>
+<label class="w"><input type="radio" name="k" id="ne" aria-label="E"><span>E</span></label>
+<label class="w"><input type="radio" name="k" id="nf" aria-label="F"><span>F</span></label>
+<label class="w"><input type="radio" name="k" id="nh" aria-label="G"><span>G</span></label>
+<label class="w"><input type="radio" name="k" id="nj" aria-label="A"><span>A</span></label>
+<label class="w"><input type="radio" name="k" id="nl" aria-label="B"><span>B</span></label>
+<label class="bk" style="left:14.29%"><input type="radio" name="k" id="nb" checked aria-label="C♯"></label>
+<label class="bk" style="left:28.57%"><input type="radio" name="k" id="nd" aria-label="D♯"></label>
+<label class="bk" style="left:57.14%"><input type="radio" name="k" id="ng" aria-label="F♯"></label>
+<label class="bk" style="left:71.43%"><input type="radio" name="k" id="ni" aria-label="G♯"></label>
+<label class="bk" style="left:85.71%"><input type="radio" name="k" id="nk" aria-label="A♯"></label>
+</div></div>
+<script>
+/* ===== 설정 (여기만 고치면 됩니다) ===== */
+var SET = {
+  sound: true,       // 소리 켜기/끄기. 끄려면 false
+  volume: 0.55,      // 크기 0~1
+  baseOctave: 3,     // 건반 C가 나는 높이. 3이면 낮고 어두운 소리, 4면 보통 높이
+  eerie: true,       // 불길한 효과(음을 살짝 엇나가게 겹치기 + 아주 작게 깔리는 낯선 울림). 끄려면 false
+  echo: 0.32         // 울림(메아리) 크기 0~1
+};
+/* ===== 소리: 피아노 비슷한 소리를 브라우저가 직접 만듭니다 (소리 파일 없음) ===== */
+var AC=null,BUS=null;
+function ctxInit(){
+  if(AC)return true;
+  var C=window.AudioContext||window.webkitAudioContext; if(!C)return false;
+  AC=new C(); BUS=makeBus(AC,AC.destination); return true;
+}
+function makeBus(ctx,dest){
+  var inp=ctx.createGain(),lp=ctx.createBiquadFilter();
+  lp.type='lowpass';lp.frequency.value=2600;lp.Q.value=0.4;
+  var dry=ctx.createGain();dry.gain.value=1;
+  var dl=ctx.createDelay(1.0);dl.delayTime.value=0.27;
+  var fb=ctx.createGain();fb.gain.value=0.42;
+  var dlp=ctx.createBiquadFilter();dlp.type='lowpass';dlp.frequency.value=1300;
+  var wet=ctx.createGain();wet.gain.value=SET.echo;
+  var out=ctx.createGain();out.gain.value=SET.volume;
+  inp.connect(lp);lp.connect(dry);dry.connect(out);
+  lp.connect(dl);dl.connect(dlp);dlp.connect(fb);fb.connect(dl);dlp.connect(wet);wet.connect(out);
+  out.connect(dest);
+  return inp;
+}
+function voice(ctx,bus,f0,t,cents,vol,len){
+  var P=[1,2,3,4,5,6,7],A=[1,.52,.3,.2,.11,.07,.04];
+  for(var k=0;k<P.length;k++){
+    var f=f0*P[k]*Math.sqrt(1+0.0005*P[k]*P[k])*Math.pow(2,cents/1200);
+    if(f>7000)break;
+    var o=ctx.createOscillator(),g=ctx.createGain(),d=len/Math.pow(P[k],0.7);
+    o.type='sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol*A[k],t+0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g);g.connect(bus);o.start(t);o.stop(t+d+0.05);
+  }
+}
+function hammer(ctx,bus,t,f0){
+  var n=Math.floor(ctx.sampleRate*0.05),b=ctx.createBuffer(1,n,ctx.sampleRate),d=b.getChannelData(0);
+  for(var i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);
+  var s=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();
+  s.buffer=b;f.type='bandpass';f.frequency.value=Math.min(1800,f0*5);f.Q.value=0.8;g.gain.value=0.22;
+  s.connect(f);f.connect(g);g.connect(bus);s.start(t);
+}
+function playNote(ctx,bus,semi,t){
+  var f0=261.6256*Math.pow(2,(SET.baseOctave-4)+semi/12);
+  hammer(ctx,bus,t,f0);
+  voice(ctx,bus,f0,t,0,0.5,3.4);
+  if(SET.eerie){
+    voice(ctx,bus,f0,t,-19,0.3,3.0);                       /* 살짝 낮게 엇나간 같은 음 → 울렁이는 불협 */
+    voice(ctx,bus,f0*0.5,t+0.02,6,0.22,3.8);               /* 한 옥타브 아래의 둔탁한 울림 */
+    var o=ctx.createOscillator(),g=ctx.createGain();       /* 아주 작게, 천천히 떠오르는 낯선 음(증4도) */
+    o.type='sine';o.frequency.value=f0*2*Math.SQRT2;
+    g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.045,t+0.9);g.gain.exponentialRampToValueAtTime(0.0001,t+3.2);
+    o.connect(g);g.connect(bus);o.start(t);o.stop(t+3.3);
+  }
+}
+function play(semi){
+  if(!SET.sound)return;
+  try{ if(!ctxInit())return; if(AC.state==='suspended')AC.resume(); playNote(AC,BUS,semi,AC.currentTime+0.01); }catch(e){}
+}
+/* 건반을 누르면 (마우스·터치·키보드 모두) 그 건반의 음이 납니다. 순서: C C♯ D D♯ E F F♯ G G♯ A A♯ B */
+var ids='abcdefghijkl';
+Array.prototype.forEach.call(document.querySelectorAll('.kb input'),function(inp){
+  var semi=ids.indexOf(inp.id.slice(1));
+  inp.addEventListener('click',function(){play(semi)});
+});
+</script>
+</body>
+</html>
