@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fermata</title>
+<!-- ─────────────────────────────────────────────
+  luvlog.me/mio · 디데이 위젯 「Fermata」 (사진 카드) 수정본2
+  올리는 곳: GitHub 저장소 enharmonic 맨 위(keys-index.html 옆)에 이 파일 그대로
+  바꿀 것은 맨 아래 <script> 의 CONFIG 만 고치면 됩니다.
+───────────────────────────────────────────── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Shippori+Mincho+B1:wght@500;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Music&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E0E10; --paper:#FFFFFF; --sub:#5F5E59; --ph:#D9D8D4;
+  /* 웹폰트를 못 받아도 고딕으로 바뀌지 않게 기기 명조/세리프를 뒤에 둠 */
+  --bodoni:"Bodoni Moda","Bodoni 72","Didot","Hiragino Mincho ProN","Yu Mincho",serif;
+  --mincho:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Batang",serif;
+  --goth:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans KR",sans-serif;
+  --music:"Noto Music","Bravura","Apple Symbols","Segoe UI Symbol",serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:transparent;overflow:hidden}
+body{font-family:var(--goth);color:var(--ink);-webkit-font-smoothing:antialiased;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+
+.card{position:relative;height:100%;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--ink);overflow:hidden}
+
+/* 사진: 원본 색 그대로, 남는 높이를 사진이 채움 */
+.ph{position:relative;flex:1 1 auto;min-height:140px;background:var(--ph) center top/cover no-repeat;border-bottom:1px solid var(--ink)}
+.ph::after{content:"";position:absolute;inset:0} /* 이미지 끌어가기 가볍게 막기 */
+.tag{position:absolute;left:0;bottom:-1px;z-index:1;background:var(--paper);border-top:1px solid var(--ink);border-right:1px solid var(--ink);
+  padding:10px 16px 9px 20px;display:flex;flex-direction:column;gap:5px}
+.tag .t{font-family:var(--bodoni);font-style:italic;font-weight:500;font-size:25px;line-height:1}
+.tag .s{font-size:10px;letter-spacing:.16em;color:var(--sub)}
+.ferm{position:absolute;right:16px;top:12px;z-index:1;font-family:var(--music);font-size:36px;line-height:1;color:#fff;
+  text-shadow:0 0 1px rgba(14,14,16,.9),0 0 8px rgba(14,14,16,.35)}
+
+.lo{flex:0 0 auto;padding:20px 20px 18px}
+
+/* 같은 하루, 두 이름 */
+.pair{position:relative;display:flex;justify-content:space-between;align-items:flex-start}
+.blk{display:flex;flex-direction:column}
+.blk.l{gap:8px;margin-top:30px}
+.blk.r{gap:7px;align-items:flex-end}
+.num{display:flex;align-items:flex-start;line-height:.82;font-family:var(--bodoni)}
+.l .p{font-weight:600;font-size:24px;margin-top:7px}
+.l .v{font-weight:800;font-size:80px;letter-spacing:-.04em}
+.r .p{font-weight:600;font-size:17px;margin-top:5px;color:transparent;-webkit-text-stroke:.9px var(--ink)}
+.r .v{font-weight:800;font-size:54px;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.1px var(--ink)}
+.r.today .v{color:var(--ink);-webkit-text-stroke:0}      /* 기념일 당일엔 속을 채움 */
+.cap{font-family:var(--mincho);font-size:10.5px;font-weight:600;letter-spacing:.26em}
+.tie{position:absolute;left:50%;top:14px;width:40px;height:18px;margin-left:-6px;border:1.2px solid var(--ink);border-right:0;border-bottom:0;border-radius:100% 0 0 0/100% 0 0 0}
+
+/* 50일 = 다섯 마디 */
+.stf{position:relative;height:104px;margin-top:18px}
+.stf .ln{position:absolute;left:0;right:0;top:24px;height:29px;background:repeating-linear-gradient(180deg,var(--ink) 0 1px,transparent 1px 7px)}
+.stf .clef{position:absolute;left:-2px;top:8px;font-family:var(--music);font-size:40px;line-height:1}
+.stf .bar{position:absolute;top:24px;width:1px;height:29px;background:var(--ink)}
+.stf .bar.end{width:1.5px}
+.stf .hd{position:absolute;top:32px;width:18px;height:12px;margin-left:-9px;overflow:visible} /* 오늘 = 가운데 줄(시) 위의 온음표 */
+.stf .a{position:absolute;left:34px;top:64px;font-size:10px;letter-spacing:.1em;color:var(--sub)}
+.stf .b{position:absolute;right:0;top:62px;text-align:right;line-height:1.45;white-space:nowrap}
+.stf .b b{display:block;font-family:var(--bodoni);font-size:16px;font-weight:700}
+.stf .b span{font-size:10px;letter-spacing:.12em;color:var(--sub)}
+
+/* 좁은 폭(폰에서 칸이 좁아질 때) */
+@media (max-width:300px){
+  .lo{padding:16px 14px 14px}
+  .l .v{font-size:68px}.r .v{font-size:46px}
+}
+</style>
+</head>
+<body>
+<article class="card" aria-label="Fermata 디데이">
+  <div class="ph" id="ph" role="img" aria-label="">
+    <div class="tag"><span class="t" id="title">Fermata</span><span class="s" id="since"></span></div>
+    <span class="ferm" aria-hidden="true">𝄐</span>
+  </div>
+
+  <div class="lo">
+    <div class="pair">
+      <div class="blk l">
+        <span class="num"><span class="p">D+</span><span class="v" id="n">–</span></span>
+        <span class="cap">はじまりから</span>
+      </div>
+      <div class="tie" aria-hidden="true"></div>
+      <div class="blk r" id="rb">
+        <span class="num"><span class="p" id="rp">D−</span><span class="v" id="left">–</span></span>
+        <span class="cap" id="rcap"></span>
+      </div>
+    </div>
+
+    <div class="stf" id="stf">
+      <div class="ln" aria-hidden="true"></div>
+      <span class="clef" aria-hidden="true">𝄞</span>
+      <svg class="hd" id="hd" viewBox="0 0 18 12" aria-hidden="true"><path fill="#0E0E10" fill-rule="evenodd" d="M0.4 6A8.6 5.8 0 1 0 17.6 6A8.6 5.8 0 1 0 0.4 6ZM11.60 8.19A3.4 5 40 1 0 6.40 3.81A3.4 5 40 1 0 11.60 8.19Z"/></svg>
+      <span class="a" id="a"></span>
+      <span class="b"><b id="nd"></b><span id="nw"></span></span>
+    </div>
+  </div>
+</article>
+
+<script>
+/* ───────── 여기만 고치면 됩니다 ───────── */
+var CONFIG = {
+  title: "Fermata",                 // 사진 왼쪽 아래 이름표 글자
+  since: "2026-11-03",              // 시작일 (년-월-일)
+  step: 50,                         // 기념일 간격. 100으로 바꾸면 100일 단위
+  firstDay: 1,                      // 1 = 시작한 날이 1일째 / 0 = 시작한 날이 0일째
+  photo: "https://firebasestorage.googleapis.com/v0/b/lovelog-cc579.firebasestorage.app/o/u%2F1nvYwvg8xSeGVYAwaoh53uyDwz02%2Fmw7xg9gv8wgj8.png?alt=media&token=0c2a220e-6cde-4638-ab11-1a031530e859",
+                                    // 사진 주소. 바꾸려면 따옴표 안 주소만 교체. 사진을 빼려면 "" 로
+  photoPos: "50% 0%",               // 사진에서 보일 부분. "50% 0%"=위쪽, "50% 50%"=가운데, "50% 100%"=아래쪽
+  photoAlt: "",                     // 사진 설명(화면 읽기 프로그램용). 비워 둬도 됨
+  celebrate: true                   // true = 기념일 당일에 오른쪽이 「D-DAY / ○日目」로 바뀜. 끄려면 false
+};
+/* ─────────────────────────────────────── */
+
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var D = 86400000, WD = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  function p2(v){ return (v < 10 ? '0' : '') + v; }
+
+  // 사진
+  var ph = $('ph');
+  if (CONFIG.photo) {
+    ph.style.backgroundImage = 'url("' + CONFIG.photo + '")';
+    ph.style.backgroundPosition = CONFIG.photoPos || '50% 0%';
+  }
+  if (CONFIG.photoAlt) ph.setAttribute('aria-label', CONFIG.photoAlt); else ph.setAttribute('aria-hidden', 'true');
+  ['contextmenu','dragstart'].forEach(function(e){ document.addEventListener(e, function(ev){ ev.preventDefault(); }); });
+
+  var m = String(CONFIG.since).match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/) || [0, 2026, 11, 3];
+  var S = Date.UTC(+m[1], +m[2] - 1, +m[3]);
+  var step = Math.max(1, +CONFIG.step || 50), off = +CONFIG.firstDay ? 1 : 0;
+  var state = {};
+
+  function calc(){
+    var t = new Date(), today = Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()); // 보는 사람 기기의 날짜 기준
+    var n = Math.round((today - S) / D) + off;
+    var isDay = n > 0 && n % step === 0;
+    var next = n <= 0 ? step : (isDay ? n + step : Math.ceil(n / step) * step);
+    var base = next - step;
+    function at(k){ return new Date(S + (k - off) * D); }
+    var cel = isDay && CONFIG.celebrate;
+    if (cel) base = n - step;               // 기념일 당일엔 방금 끝난 다섯 마디를 보여 줌
+    var nd = at(cel ? n : next), sd = at(base + 1);
+    state = { n:n, next:next, base:base, isDay:cel };
+
+    $('title').textContent = CONFIG.title || 'Fermata';
+    $('since').textContent = m[1] + '.' + p2(+m[2]) + '.' + p2(+m[3]);
+    $('n').textContent = n > 0 ? n : 0;
+
+    var rb = $('rb');
+    if (state.isDay) {
+      rb.classList.add('today');
+      $('rp').textContent = ''; $('left').textContent = 'D-DAY';
+      $('left').style.fontSize = '30px';
+      $('rcap').textContent = n + '日目';
+    } else {
+      rb.classList.remove('today');
+      $('rp').textContent = 'D−'; $('left').textContent = next - Math.max(n, 0);
+      $('left').style.fontSize = '';
+      $('rcap').textContent = next + '日目まで';
+    }
+    $('a').textContent = p2(sd.getUTCMonth() + 1) + '.' + p2(sd.getUTCDate());
+    $('nd').textContent = p2(nd.getUTCMonth() + 1) + '.' + p2(nd.getUTCDate());
+    $('nw').textContent = WD[nd.getUTCDay()];
+    draw();
+  }
+
+  // 오선 위치는 칸 폭에 맞춰 다시 계산
+  var bars = [];
+  function draw(){
+    var stf = $('stf'), W = stf.clientWidth, x0 = 34, span = Math.max(60, W - 38);
+    bars.forEach(function(b){ b.remove(); }); bars = [];
+    for (var i = 1; i <= 5; i++) {
+      var b = document.createElement('div');
+      b.className = 'bar' + (i === 5 ? ' end' : '');
+      b.setAttribute('aria-hidden', 'true');
+      b.style.left = Math.round(x0 + span * i / 5) + 'px';
+      stf.appendChild(b); bars.push(b);
+    }
+    // 기념일 당일은 마지막 마디선 위에 음표
+    var pos = state.isDay ? step : Math.max(state.n, 0) - state.base - 0.5;
+    pos = Math.max(0, Math.min(step, pos));
+    // 음표가 마디선에 겹치지 않게, 그 날이 속한 마디 안쪽(양끝 10px 여유)에 둠
+    var mw = span / 5, mi = Math.min(4, Math.floor(pos / (step / 5) - 1e-9));
+    if (mi < 0) mi = 0;
+    var ms = x0 + mi * mw, tx = Math.round(x0 + pos * span / step);
+    tx = Math.max(ms + 10, Math.min(ms + mw - 10, tx));
+    $('hd').style.left = tx + 'px';
+  }
+
+  calc();
+  var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(draw, 60); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  // 자정이 지나면 숫자 갱신
+  setInterval(calc, 60000);
+})();
+</script>
+</body>
+</html>
