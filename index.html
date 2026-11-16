@@ -2,7 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>合言葉 — enharmonic</title>
-<!-- 合言葉 게임 수정본2 (調律室). GitHub 저장소의 index.html 을 이 파일로 교체 (파일 이름 그대로). 러브로그 쪽은 그대로 -->
+<!-- 合言葉 게임 수정본3 (調律室 · 도트 화면). GitHub 저장소의 index.html 을 이 파일로 교체 (파일 이름 그대로). 러브로그 쪽은 그대로 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -17,23 +17,31 @@ html,body{margin:0;height:100%;overflow:hidden;background:transparent;color:var(
 /* 흰 기계 본체 (아래 34px은 그림자 자리) */
 #app{position:absolute;left:2px;right:2px;top:2px;bottom:34px;display:flex;flex-direction:column;gap:12px;min-height:300px;padding:14px;
   border:1px solid #dededb;border-radius:16px;background:linear-gradient(#fff,#fbfbfa 30%,#f1f1ef);
-  box-shadow:0 1px 0 #fff inset,0 26px 44px -26px rgba(0,0,0,.42),0 3px 8px rgba(0,0,0,.06)}
+  box-shadow:0 1px 0 #fff inset,0 16px 24px -16px rgba(0,0,0,.36),0 3px 8px rgba(0,0,0,.06)}
 /* 위쪽 표시줄: 점수 + 목숨(♭) */
 #bar{flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px;font:800 16px/1 var(--mincho);letter-spacing:.06em}
-#score{display:inline-block;min-width:2.2em;margin-left:6px;padding:5px 8px 4px;border-radius:6px;background:#0d0d0e;color:var(--lit);text-align:center;font-variant-numeric:tabular-nums}
+#score{display:inline-block;min-width:2.2em;margin-left:6px;padding:5px 8px 4px;clip-path:polygon(4px 0,calc(100% - 4px) 0,calc(100% - 4px) 2px,calc(100% - 2px) 2px,calc(100% - 2px) 4px,100% 4px,100% calc(100% - 4px),calc(100% - 2px) calc(100% - 4px),calc(100% - 2px) calc(100% - 2px),calc(100% - 4px) calc(100% - 2px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 2px),2px calc(100% - 2px),2px calc(100% - 4px),0 calc(100% - 4px),0 4px,2px 4px,2px 2px,4px 2px);background:#0d0d0e;color:var(--lit);text-align:center;font-variant-numeric:tabular-nums}
 #lives{display:flex;gap:6px;align-items:center}
 #lives svg{width:14px;height:22px;transition:opacity .3s,transform .3s}
 #lives svg.off{opacity:.15;transform:translateY(5px) rotate(18deg)}
 /* 하늘 = 검은 화면창 */
-#field{position:relative;flex:1;overflow:hidden;border-radius:10px;background:#0d0d0e;color:var(--lit);
-  box-shadow:inset 0 0 0 1px #000,inset 0 3px 12px rgba(0,0,0,.9),0 1px 0 #fff}
-#field::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;background:linear-gradient(115deg,rgba(255,255,255,.07) 0 22%,transparent 22.4%)}
-#ground{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--lit);opacity:.85}
+/* 하늘 = 작은 점(LED)이 촘촘한 도트 화면. 위에서 도트 빗방울이 내림 */
+#field{position:relative;flex:1;overflow:hidden;border-radius:10px 10px 0 0;color:var(--lit);
+  background:linear-gradient(90deg,#070708 1px,transparent 1px) 0 0/4px 4px,linear-gradient(#070708 1px,transparent 1px) 0 0/4px 4px,#18181a;
+  box-shadow:inset 0 0 0 1px #000,inset 0 3px 12px rgba(0,0,0,.9)}
+#field::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.32;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='112'%20height='200'%20viewBox='0%200%2056%20100'%20shape-rendering='crispEdges'%3E%3Cg%20fill='%23f5f5f3'%3E%3Crect%20x='3'%20y='2'%20width='1'%20height='3'/%3E%3Crect%20x='3'%20y='7'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='17'%20y='30'%20width='1'%20height='3'/%3E%3Crect%20x='17'%20y='35'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='9'%20y='58'%20width='1'%20height='3'/%3E%3Crect%20x='9'%20y='63'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='27'%20y='12'%20width='1'%20height='3'/%3E%3Crect%20x='27'%20y='17'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='36'%20y='44'%20width='1'%20height='3'/%3E%3Crect%20x='36'%20y='49'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='45'%20y='70'%20width='1'%20height='3'/%3E%3Crect%20x='45'%20y='75'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='52'%20y='24'%20width='1'%20height='3'/%3E%3Crect%20x='52'%20y='29'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='21'%20y='80'%20width='1'%20height='3'/%3E%3Crect%20x='21'%20y='85'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='40'%20y='4'%20width='1'%20height='3'/%3E%3Crect%20x='40'%20y='9'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='6'%20y='90'%20width='1'%20height='3'/%3E%3Crect%20x='6'%20y='95'%20width='1'%20height='1'%20opacity='.5'/%3E%3C/g%3E%3C/svg%3E") 0 0/112px 200px;animation:rain 2.6s steps(26) infinite}
+@keyframes rain{to{background-position:0 200px}}
+#field::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;background:linear-gradient(115deg,rgba(255,255,255,.05) 0 22%,transparent 22.4%)}
+#ground{position:absolute;left:0;right:0;bottom:0;height:2px;background:#f5f5f3;opacity:.6}
+/* 바닥 = 도트 피아노 (대사가 여기에 닿으면 목숨이 줄어듦) */
+#px{flex:none;height:30px;margin-top:-12px;border-radius:0 0 10px 10px;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='112'%20height='26'%20viewBox='0%200%2056%2013'%20shape-rendering='crispEdges'%3E%3Crect%20width='56'%20height='13'%20fill='%230b0b0c'/%3E%3Crect%20x='0'%20y='0'%20width='7'%20height='12'%20fill='%23f5f5f3'/%3E%3Crect%20x='0'%20y='10'%20width='7'%20height='2'%20fill='%23c9c9c6'/%3E%3Crect%20x='8'%20y='0'%20width='7'%20height='12'%20fill='%23f5f5f3'/%3E%3Crect%20x='8'%20y='10'%20width='7'%20height='2'%20fill='%23c9c9c6'/%3E%3Crect%20x='16'%20y='0'%20width='7'%20height='12'%20fill='%23f5f5f3'/%3E%3Crect%20x='16'%20y='10'%20width='7'%20height='2'%20fill='%23c9c9c6'/%3E%3Crect%20x='24'%20y='0'%20width='7'%20height='12'%20fill='%23f5f5f3'/%3E%3Crect%20x='24'%20y='10'%20width='7'%20height='2'%20fill='%23c9c9c6'/%3E%3Crect%20x='32'%20y='0'%20width='7'%20height='12'%20fill='%23f5f5f3'/%3E%3Crect%20x='32'%20y='10'%20width='7'%20height='2'%20fill='%23c9c9c6'/%3E%3Crect%20x='40'%20y='0'%20width='7'%20height='12'%20fill='%23f5f5f3'/%3E%3Crect%20x='40'%20y='10'%20width='7'%20height='2'%20fill='%23c9c9c6'/%3E%3Crect%20x='48'%20y='0'%20width='7'%20height='12'%20fill='%23f5f5f3'/%3E%3Crect%20x='48'%20y='10'%20width='7'%20height='2'%20fill='%23c9c9c6'/%3E%3Crect%20x='5'%20y='0'%20width='5'%20height='7'%20fill='%230b0b0c'/%3E%3Crect%20x='6'%20y='6'%20width='3'%20height='1'%20fill='%233a3a3d'/%3E%3Crect%20x='13'%20y='0'%20width='5'%20height='7'%20fill='%230b0b0c'/%3E%3Crect%20x='14'%20y='6'%20width='3'%20height='1'%20fill='%233a3a3d'/%3E%3Crect%20x='29'%20y='0'%20width='5'%20height='7'%20fill='%230b0b0c'/%3E%3Crect%20x='30'%20y='6'%20width='3'%20height='1'%20fill='%233a3a3d'/%3E%3Crect%20x='37'%20y='0'%20width='5'%20height='7'%20fill='%230b0b0c'/%3E%3Crect%20x='38'%20y='6'%20width='3'%20height='1'%20fill='%233a3a3d'/%3E%3Crect%20x='45'%20y='0'%20width='5'%20height='7'%20fill='%230b0b0c'/%3E%3Crect%20x='46'%20y='6'%20width='3'%20height='1'%20fill='%233a3a3d'/%3E%3C/svg%3E") 0 2px/112px 26px repeat-x,#0b0b0c;image-rendering:pixelated;
+  box-shadow:inset 0 0 0 1px #000,0 1px 0 #fff}
 .w{position:absolute;top:0;left:0;max-width:calc(100% - 8px);font-family:var(--mincho);font-weight:800;font-size:17px;line-height:1.35;
-  /* 칸이 좁으면 긴 대사는 두 줄로 접힘 (예전엔 오른쪽이 잘렸음) */
-  padding:7px 11px;background:#1b1b1d;color:var(--lit);border-radius:8px;box-shadow:inset 0 0 0 1px #2c2c2f;will-change:transform}
-.w.hit{color:var(--mute);text-decoration:line-through;transition:opacity .35s;opacity:0}
-.w.miss{background:var(--lit);color:var(--ink);transition:opacity .4s;opacity:0}
+  /* 칸이 좁으면 긴 대사는 두 줄로 접힘 */
+  padding:8px 12px;background:var(--lit);color:var(--ink);clip-path:polygon(4px 0,calc(100% - 4px) 0,calc(100% - 4px) 2px,calc(100% - 2px) 2px,calc(100% - 2px) 4px,100% 4px,100% calc(100% - 4px),calc(100% - 2px) calc(100% - 4px),calc(100% - 2px) calc(100% - 2px),calc(100% - 4px) calc(100% - 2px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 2px),2px calc(100% - 2px),2px calc(100% - 4px),0 calc(100% - 4px),0 4px,2px 4px,2px 2px,4px 2px);will-change:transform}
+/* 맞히면 점이 성기게 흩어지며 사라짐 / 놓치면 검게 뒤집힘 */
+.w.hit{background:repeating-conic-gradient(var(--lit) 0 25%,transparent 0 50%) 0 0/4px 4px;color:transparent;transition:opacity .4s;opacity:0}
+.w.miss{background:#0b0b0c;color:var(--lit);outline:2px solid var(--lit);outline-offset:-4px;transition:opacity .45s;opacity:0}
 /* 아래 입력줄 */
 #in{flex:none;display:flex;gap:10px;align-items:center}
 #txt{flex:1;min-width:0;font:inherit;font-size:16px;padding:12px 16px;border:0;border-radius:10px;background:var(--well);box-shadow:var(--sink);color:var(--ink);outline:0;
@@ -46,7 +54,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:transparent;color:var(
 #txt.shake{animation:sh .25s}
 @keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 /* 시작·끝 화면 (검은 화면창 안) */
-.scr{position:absolute;inset:0;z-index:5;background:rgba(13,13,14,.94);color:var(--lit);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
+.scr{position:absolute;inset:0;z-index:5;background:linear-gradient(90deg,#070708 1px,transparent 1px) 0 0/4px 4px,linear-gradient(#070708 1px,transparent 1px) 0 0/4px 4px,rgba(24,24,26,.96);color:var(--lit);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
 .scr[hidden]{display:none}
 .scr h1{margin:0;font-family:var(--mincho);font-weight:800;font-size:52px;letter-spacing:.14em;text-indent:.14em;line-height:1}
 .scr .sub{font-size:13px;letter-spacing:.08em;color:var(--mute)}
@@ -80,6 +88,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:transparent;color:var(
       <button class="btn" id="again">もう一度</button>
     </div>
   </div>
+  <div id="px" aria-hidden="true"></div>
   <form id="in" autocomplete="off">
     <input id="txt" type="text" placeholder="사랑해" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" aria-label="합言葉 입력">
     <button id="go" type="submit">Enter</button>
