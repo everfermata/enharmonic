@@ -5,60 +5,66 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>メトロノーム</title>
 <style>
+/* 메트로놈 위젯 수정본2 (調律室) — 빠르기·'틱' 소리·멈춤은 수정본1과 같고 겉모양만 바뀜. 설정은 아래쪽 SET */
 @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;800&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap');
 html,body{margin:0;background:transparent;-webkit-text-size-adjust:100%}
-.mt{--ink:#111;--sub:#555;--pa:#fff;--beat:.833s;position:relative;color:var(--ink);font-family:'Zen Kaku Gothic New','Noto Sans KR',sans-serif;text-align:center;padding:8px 0 6px}
+*{box-sizing:border-box}
+.mt{--ink:#101011;--sub:#55555a;--lit:#f5f5f3;--beat:.833s;position:relative;color:var(--ink);font-family:'Zen Kaku Gothic New','Noto Sans KR',sans-serif;text-align:center;
+  margin:2px 2px 34px;padding:34px 16px 16px;border:1px solid #dededb;border-radius:16px;background:linear-gradient(#fff,#fbfbfa 30%,#f1f1ef);
+  box-shadow:0 1px 0 #fff inset,0 26px 44px -26px rgba(0,0,0,.42),0 3px 8px rgba(0,0,0,.06);-webkit-user-select:none;user-select:none}
 .mt input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
 .mt:has(#t1:checked){--beat:1.154s}
 .mt:has(#t2:checked){--beat:.833s}
 .mt:has(#t3:checked){--beat:.455s}
-/* 본체 */
-.bd{position:relative;display:block;width:min(100%,220px);margin:0 auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+/* 본체 (누르면 멈춤 / 다시 누르면 움직임) */
+.bd{position:relative;display:block;width:min(100%,180px);margin:0 auto;cursor:pointer;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 18px 14px rgba(0,0,0,.28))}
 .bd svg{display:block;width:100%;height:auto;overflow:visible}
 .arm{transform-box:view-box;transform-origin:100px 214px;animation:sw var(--beat) ease-in-out infinite alternate}
 @keyframes sw{from{transform:rotate(-11deg)}to{transform:rotate(11deg)}}
 .dot{transform-box:view-box;transform-origin:100px 248px;animation:bt var(--beat) ease-out infinite}
-@keyframes bt{0%{opacity:1}55%,100%{opacity:.12}}
-/* 멈춤 */
-.fm{position:absolute;left:50%;top:-4px;transform:translateX(-50%);opacity:0;transition:opacity .3s;pointer-events:none}
+@keyframes bt{0%{opacity:1}55%,100%{opacity:.15}}
+/* 멈춤 = 페르마타 */
+.bd svg.fm{position:absolute;left:50%;top:-26px;width:34px;height:20px;transform:translateX(-50%);opacity:0;transition:opacity .3s;pointer-events:none}
 .mt:has(#ps:checked) .arm,.mt:has(#ps:checked) .dot{animation-play-state:paused}
-.mt:has(#ps:checked) .fm{opacity:1}
+.mt:has(#ps:checked) .bd svg.fm{opacity:1}
 .bd:has(:focus-visible){outline:2px solid #888;outline-offset:4px}
+.bd:active svg{transform:translateY(1px)}
 /* 빠르기 표시 */
-.tp{margin:14px 0 0;font:400 18px/1 'Shippori Mincho B1',serif;letter-spacing:.04em}
-.tp b{font-weight:800;font-size:22px;margin-left:4px}
+.tp{margin:16px 0 0;font:400 20px/1 'Shippori Mincho B1',serif;letter-spacing:.04em}
+.tp b{font-weight:800;font-size:26px;margin-left:4px;font-variant-numeric:tabular-nums}
 .tp b::after{content:"72"}
 .mt:has(#t1:checked) .tp b::after{content:"52"}
 .mt:has(#t3:checked) .tp b::after{content:"132"}
 .mt:has(#ps:checked) .tp{color:var(--sub)}
-.sp{display:flex;justify-content:center;gap:4px;margin-top:12px;flex-wrap:wrap}
-.sp label{position:relative;cursor:pointer;padding:6px 8px 7px;font:italic 400 13px/1 'Shippori Mincho B1',serif;color:var(--sub);border-bottom:1px solid transparent;-webkit-tap-highlight-color:transparent;transition:color .15s}
+/* 빠르기 고르기 = 움푹 들어간 칸 + 고른 것만 검은 버튼 */
+.sp{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:14px;padding:4px;border-radius:10px;background:#f1f1ef;box-shadow:inset 0 2px 5px rgba(0,0,0,.22),inset 0 0 0 1px rgba(0,0,0,.08)}
+.sp label{position:relative;cursor:pointer;padding:10px 0;border-radius:7px;font:italic 400 13px/1 'Shippori Mincho B1',serif;color:var(--sub);-webkit-tap-highlight-color:transparent;transition:color .15s,background .15s}
 .sp label:hover{color:var(--ink)}
-.sp label:has(:checked){color:var(--ink);border-bottom-color:var(--ink)}
+.sp label:has(:checked){color:var(--lit);background:linear-gradient(#2c2c2e,#0c0c0d);box-shadow:0 4px 8px -2px rgba(0,0,0,.5),inset 0 1px 0 #5a5a5d}
 .sp label:has(:focus-visible){outline:2px solid #888}
-.sp label:active,.bd:active svg{transform:translateY(1px)}
-@media (prefers-reduced-motion:reduce){.arm,.dot{animation:none}}
+.sp label:active{transform:translateY(1px)}
 </style>
 </head>
 <body>
 <div class="mt">
 <label class="bd" aria-label="メトロノーム 止める / 動かす"><input type="checkbox" id="ps">
-<svg viewBox="0 0 200 262" fill="none" stroke="#111" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+<svg viewBox="0 0 200 262" fill="none" stroke="#000" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+<defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#333336"/><stop offset=".7" stop-color="#0e0e0f"/></linearGradient></defs>
 <!-- 몸체 -->
-<path d="M78 10H122L168 238H32Z" fill="#fff"/>
+<path d="M78 10H122L168 238H32Z" fill="url(#gb)"/>
 <!-- 창 -->
-<path d="M90 30H110L128 196H72Z" fill="#f3f3f3" stroke-width="1"/>
+<path d="M90 30H110L128 196H72Z" fill="#26262a" stroke="#000" stroke-width="1"/>
 <!-- 눈금 -->
-<g stroke-width="1"><path d="M112 50h6M114 66h4M115 82h6M117 98h4M118 114h6M120 130h4M121 146h6M123 162h4M124 178h6"/></g>
+<g stroke="#8d8d92" stroke-width="1"><path d="M112 50h6M114 66h4M115 82h6M117 98h4M118 114h6M120 130h4M121 146h6M123 162h4M124 178h6"/></g>
 <!-- 받침 -->
-<path d="M24 238H176V252H24Z" fill="#fff"/>
+<path d="M24 238H176V252H24Z" fill="#0b0b0c"/>
 <!-- 박 표시 점 -->
-<circle class="dot" cx="100" cy="225" r="3.5" fill="#111" stroke="none"/>
+<circle class="dot" cx="100" cy="225" r="3.5" fill="#f5f5f3" stroke="none"/>
 <!-- 추 -->
 <g class="arm">
-<path d="M100 214V54" stroke-width="2"/>
-<path d="M91 74H109L106 90H94Z" fill="#111" stroke="none"/>
-<circle cx="100" cy="214" r="4" fill="#fff"/>
+<path d="M100 214V54" stroke="#f5f5f3" stroke-width="2.4"/>
+<path d="M91 74H109L106 90H94Z" fill="#f5f5f3" stroke="none"/>
+<circle cx="100" cy="214" r="4" fill="#0b0b0c" stroke="#f5f5f3"/>
 </g>
 </svg>
 <svg class="fm" width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><path d="M3 18C4 7 10 3 17 3S30 7 31 18" fill="none" stroke="#111" stroke-width="2"/><circle cx="17" cy="15" r="2.6" fill="#111"/></svg>
