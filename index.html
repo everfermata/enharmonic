@@ -26,7 +26,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:transparent;color:var(
 #lives svg.off{opacity:.15;transform:translateY(5px) rotate(18deg)}
 /* 하늘 = 검은 화면창 */
 /* 하늘 = 작은 점(LED)이 촘촘한 도트 화면. 위에서 도트 빗방울이 내림 */
-#field{position:relative;flex:1;overflow:hidden;border-radius:10px 10px 0 0;color:var(--lit);
+#field{container-type:size;position:relative;flex:1;overflow:hidden;border-radius:10px 10px 0 0;color:var(--lit);
   background:linear-gradient(90deg,#070708 1px,transparent 1px) 0 0/4px 4px,linear-gradient(#070708 1px,transparent 1px) 0 0/4px 4px,#18181a;
   box-shadow:inset 0 0 0 1px #000,inset 0 3px 12px rgba(0,0,0,.9)}
 #field::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.32;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='112'%20height='200'%20viewBox='0%200%2056%20100'%20shape-rendering='crispEdges'%3E%3Cg%20fill='%23f5f5f3'%3E%3Crect%20x='3'%20y='2'%20width='1'%20height='3'/%3E%3Crect%20x='3'%20y='7'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='17'%20y='30'%20width='1'%20height='3'/%3E%3Crect%20x='17'%20y='35'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='9'%20y='58'%20width='1'%20height='3'/%3E%3Crect%20x='9'%20y='63'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='27'%20y='12'%20width='1'%20height='3'/%3E%3Crect%20x='27'%20y='17'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='36'%20y='44'%20width='1'%20height='3'/%3E%3Crect%20x='36'%20y='49'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='45'%20y='70'%20width='1'%20height='3'/%3E%3Crect%20x='45'%20y='75'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='52'%20y='24'%20width='1'%20height='3'/%3E%3Crect%20x='52'%20y='29'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='21'%20y='80'%20width='1'%20height='3'/%3E%3Crect%20x='21'%20y='85'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='40'%20y='4'%20width='1'%20height='3'/%3E%3Crect%20x='40'%20y='9'%20width='1'%20height='1'%20opacity='.5'/%3E%3Crect%20x='6'%20y='90'%20width='1'%20height='3'/%3E%3Crect%20x='6'%20y='95'%20width='1'%20height='1'%20opacity='.5'/%3E%3C/g%3E%3C/svg%3E") 0 0/112px 200px;animation:rain 2.6s steps(26) infinite}
@@ -66,6 +66,23 @@ html,body{margin:0;height:100%;overflow:hidden;background:transparent;color:var(
   background:linear-gradient(#fff,#e9e9e6);box-shadow:0 5px 0 #8d8d92,0 14px 18px -8px rgba(0,0,0,.6);transition:transform .12s,box-shadow .12s}
 .btn:active{transform:translateY(4px);box-shadow:0 1px 0 #8d8d92,0 4px 6px -3px rgba(0,0,0,.6)}
 .rest{display:inline-block;vertical-align:middle}
+/* ---- 시작 화면 크기 맞춤: 화면창 크기(폭·높이)에 따라 글자·간격이 줄고 늘어서 잘리지 않습니다 ----
+   · 좁은 곳(대문 밖 옆 칸)이나 낮은 칸에서는 자동으로 작아지고,
+   · 넓은 곳(PC 대문)에서는 글을 왼쪽·오른쪽 두 덩어리로 나눠 위아래가 답답하지 않게 합니다 */
+#start{gap:clamp(6px,2.6cqh,14px);padding:clamp(10px,4cqh,24px) clamp(12px,5cqw,28px)}
+#start h1{font-size:clamp(30px,min(19cqw,14cqh),52px)}
+#start p{font-size:clamp(11px,min(4.6cqw,3.5cqh),13px);line-height:1.7;max-width:100%}
+#start p b{font-size:clamp(14px,min(6cqw,4.6cqh),18px) !important}
+#start .btn{padding:clamp(10px,3.4cqh,14px) clamp(22px,7cqw,30px);font-size:clamp(13px,min(5cqw,4cqh),15px)}
+@container (min-width:520px){
+  #start{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto;align-content:center;justify-content:center;column-gap:clamp(24px,6cqw,56px);row-gap:clamp(8px,3cqh,16px);
+    max-width:100%;padding:clamp(16px,5cqh,32px) clamp(24px,6cqw,56px)}
+  #start h1{grid-column:1;grid-row:1;align-self:end;font-size:clamp(40px,min(10cqw,17cqh),64px)}
+  #start p:nth-of-type(1){grid-column:1;grid-row:2;align-self:start;font-size:clamp(12px,min(2.2cqw,3.6cqh),15px)}
+  #start p:nth-of-type(2){grid-column:2;grid-row:1/3;align-self:center;padding-left:clamp(18px,3cqw,34px);border-left:1px solid #3a3a3d;text-align:left;font-size:clamp(12px,min(2.2cqw,3.6cqh),15px)}
+  #start p:nth-of-type(2) b{display:inline-block;margin:.25em 0}
+  #start .btn{grid-column:1/-1;grid-row:3;justify-self:center;margin-top:clamp(4px,2cqh,12px)}
+}
 @media (max-width:380px){#app{padding:10px;gap:10px}.scr h1{font-size:42px}}
 </style></head><body>
 <div id="app">
