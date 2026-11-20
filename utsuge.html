@@ -290,9 +290,9 @@ button{font:inherit;color:inherit}
       <svg viewBox="0 0 32 32"><rect x="3" y="3" width="26" height="26" fill="#fff" stroke="#000" stroke-width="2"/><rect x="3" y="3" width="26" height="6"/><text x="16" y="25" font-size="14" text-anchor="middle" font-family="sans-serif" font-weight="700">澪</text></svg>
       <span>澪標</span>
     </button>
-    <button class="ic" type="button" data-ic="note" aria-label="읽어주세요.txt 열기">
+    <button class="ic" type="button" data-ic="note" aria-label="READ ME.txt 열기">
       <svg viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M20 3v6h6" fill="#c0c0c0" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg>
-      <span>읽어주세요.txt</span>
+      <span>READ ME.txt</span>
     </button>
     <button class="ic" type="button" data-ic="bin" aria-label="휴지통">
       <svg viewBox="0 0 32 32"><path d="M8 9h16l-2 20H10z" fill="#dcdcdc" stroke="#000" stroke-width="2"/><path d="M6 7h20M13 4h6" stroke="#000" stroke-width="2"/><path d="M13 13v12M16 13v12M19 13v12" stroke="#808080" stroke-width="1.5"/></svg>
@@ -353,10 +353,10 @@ button{font:inherit;color:inherit}
     </div>
   </section>
 
-  <section class="win" id="wNote" data-state="closed" hidden aria-label="읽어주세요.txt">
+  <section class="win" id="wNote" data-state="closed" hidden aria-label="READ ME.txt">
     <div class="tt">
       <svg class="ti" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg>
-      <span class="nm">읽어주세요.txt - 메모장</span>
+      <span class="nm">READ ME.txt - 메모장</span>
       <button class="tbtn" type="button" data-act="min" aria-label="최소화"><svg width="8" height="7" viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button>
       <button class="tbtn" type="button" data-act="max" disabled aria-label="최대화"><svg width="9" height="8" viewBox="0 0 9 8"><path fill-rule="evenodd" d="M0 0h9v8H0zM1 2v5h7V2z"/></svg></button>
       <button class="tbtn x" type="button" data-act="close" aria-label="닫기"><svg width="8" height="7" viewBox="0 0 8 7"><path d="M0 0h2l2 2 2-2h2L5 3.5 8 7H6L4 5 2 7H0l3-3.5z"/></svg></button>
@@ -368,7 +368,7 @@ button{font:inherit;color:inherit}
     <div class="band"><b>enharmonic</b> 98</div>
     <ul>
       <li><button type="button" data-sm="game"><svg viewBox="0 0 32 32"><rect x="3" y="3" width="26" height="26" fill="#fff" stroke="#000" stroke-width="2"/><rect x="3" y="3" width="26" height="6"/><text x="16" y="25" font-size="14" text-anchor="middle" font-family="sans-serif" font-weight="700">澪</text></svg>澪標</button></li>
-      <li><button type="button" data-sm="note"><svg viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg>읽어주세요.txt</button></li>
+      <li><button type="button" data-sm="note"><svg viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg>READ ME.txt</button></li>
       <li><hr></li>
       <li><button type="button" data-sm="reset"><svg viewBox="0 0 32 32"><path d="M24 10a10 10 0 1 0 2 9" fill="none" stroke="#000" stroke-width="3"/><path d="M26 3v9h-9z"/></svg>다시 시작</button></li>
       <li><button type="button" data-sm="off"><svg viewBox="0 0 32 32"><path d="M10 9a10 10 0 1 0 12 0" fill="none" stroke="#000" stroke-width="3"/><path d="M16 3v12" stroke="#000" stroke-width="3"/></svg>시스템 종료</button></li>
@@ -379,7 +379,7 @@ button{font:inherit;color:inherit}
     <button class="btn98 start" id="start" type="button"><b class="slogo">♯</b>시작</button>
     <i class="sep"></i>
     <button class="btn98 task" id="tkGame" type="button"><svg viewBox="0 0 32 32"><rect x="3" y="3" width="26" height="26" fill="#fff" stroke="#000" stroke-width="2"/><rect x="3" y="3" width="26" height="6"/><text x="16" y="25" font-size="14" text-anchor="middle" font-family="sans-serif" font-weight="700">澪</text></svg><span id="tkGameT"></span></button>
-    <button class="btn98 task" id="tkNote" type="button" hidden><svg viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg><span>읽어주세요.txt - 메모장</span></button>
+    <button class="btn98 task" id="tkNote" type="button" hidden><svg viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg><span>READ ME.txt - 메모장</span></button>
     <div class="tray">
       <button class="spk" id="spk" type="button" aria-label="소리 켜기/끄기"><svg viewBox="0 0 16 16"><path d="M2 6h3l4-3v10l-4-3H2z"/><path class="wv" d="M11 5.5c1 .8 1 4.2 0 5M12.8 4c2 1.6 2 6.4 0 8" fill="none" stroke="#000" stroke-width="1.2"/><path class="mx" d="M11 6l4 4M15 6l-4 4" stroke="#000" stroke-width="1.4"/></svg></button>
       <span id="clock">0:00</span>
@@ -416,8 +416,8 @@ const SET = {
     on: true,      // 처음에 소리 켜 둘지
     se: true,      // 효과음 (타이틀 버튼 = 불협화음 울림, 게임 안 버튼 = 딸깍)
     seVol: 0.6,    // 효과음 크기 0 ~ 1
-    bgm1: '',      // 반전 전 BGM 파일 (예: 'bgm/before.mp3'). 비우면 BGM 없음
-    bgm2: '',      // 반전 뒤 BGM. 비우면 bgm1이 계속 흐름
+    bgm1: 'bgm/before.mp3',      // 반전 전 BGM 파일 (예: 'bgm/before.mp3'). 비우면 BGM 없음
+    bgm2: 'bgm/after.mp3',      // 반전 뒤 BGM. 비우면 bgm1이 계속 흐름
     bgmVol: 0.7
   },
   speed: 34,          // 글자 나오는 빠르기 (작을수록 빠름)
@@ -500,7 +500,7 @@ const STORY = `
 실내에서도 그녀는 그걸 풀지 않는다.
 ……언제부터였더라.
 [배경 피아노]
-방 구석의 전자피아노. 보면대에 펼쳐 둔 합주 악보까지, 모서리가 반듯하게 맞춰져 있었다.
+방 구석의 전자 피아노. 보면대에 펼쳐 둔 합주 악보까지, 모서리가 반듯하게 맞춰져 있었다.
 토와: 「이것도 닦았어. 헤드폰은 꽂혀 있길래 그대로 뒀고.」
 토와: 「오빠, 밤에도 치는구나.」
 미오: 「다음 주가 합주라서. 키보드 파트가 좀 까다로워.」
@@ -509,7 +509,7 @@ C♯. 손에 익은 첫 음이, 스피커를 타고 방 안에 번진다.
 등 뒤에서, 토와가 숨을 삼키는 소리가 들렸다.
 미오: 「요즘 보컬 반주만 맞추다 보니까, 생각나더라.」
 미오: 「그러고 보니 너, 옛날엔 곧잘 노래했잖아.」
-미오: 「요즘은 왜 내 피아노에 맞춰 안 불러?」
+미오: 「요즘은 통 노래 관련된 얘기를 안 하네.」
 [효과 차가움]
 토와: 「……」
 대답이 없다.
@@ -538,7 +538,7 @@ C♯. 손에 익은 첫 음이, 스피커를 타고 방 안에 번진다.
 [이름판 짧게]
 [배경 피아노]
 [등장 토와:무표정]
-전자피아노만이, 처음 그대로 거기 있었다.
+전자 피아노만이, 처음 그대로 거기 있었다.
 뽑아 두었던 헤드폰까지, 아까 그 자리에.
 [선택 토와에게 노래를 부탁한다 | 아무 말도 하지 않는다 덮어쓰기]
 토와: 「옛날엔 곧잘 노래했잖아, 라고 했지.」
@@ -569,19 +569,20 @@ C♯. 손에 익은 첫 음이, 스피커를 타고 방 안에 번진다.
 [효과 붉음]
 토와가 부엌으로 걸어간다. 정리된 서랍을, 망설임 없이 연다.
 어디에 뭐가 있는지 다 알 것 같았어, 라고 했던가.
-돌아온 그녀의 손에는, 내게 사과를 깎아 주던 작은 [[과도]]가 들려 있었다.
+돌아온 그녀의 손에는, 이 집에서는 좀처럼 쓰이지 않는 [[과도]]가 들려 있었다.
 미오: 「토와. 그거, 내려놔.」
-토와: 「왜? 오빠를 찌르려는 거 아니야.」
-토와: 「나는 오빠한테 그런 짓 안 해. 한 번도 안 했어.」
+토와: 「하핫, 어째서야?」
+[속도 느림]
+토와: 「왜 이제야, 그렇게 놀란 얼굴을 하는 거야.」
 [이름판 비움]
 [속도 아주느림]
-토와: 「[[나한테만 해.]]」
+토와: 「[[그때는, 전혀 보고 있지 않았잖아.]]」
 [속도 보통]
 [효과 흔들림]
 토와: 「오빠, 쳐 줘. 처음부터.」
 토와: 「이번엔 끝까지 부를게. 목소리가 안 나와도 부를게.」
 토와: 「그러면, 이번엔 봐 줄 거잖아.」
-[반복 오빠, 봐 줘.]
+[반복 피투성이로엉망진창이되어노래하는나를봐줘.]
 [확인창 지금까지의 기록을 저장하시겠습니까?]
 
 [암전]
