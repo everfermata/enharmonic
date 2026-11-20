@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>澪標 시안2</title>
+<title>澪標</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
@@ -140,6 +140,11 @@ button{font:inherit;color:inherit}
 .game.cgon .cg{display:block}
 .game.cgon .st{opacity:0!important}
 .st.solo{left:34%!important;right:auto!important}
+
+.scar{position:absolute;inset:0;background:#fff}
+.scar svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scar .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:scardraw var(--sd,1600ms) .3s cubic-bezier(.55,0,.25,1) forwards}
+@keyframes scardraw{to{stroke-dashoffset:0}}
 
 /* ── 고장 효과 ── */
 /* 어둠: 대사창 띠가 검게 바뀜 */
@@ -415,6 +420,7 @@ const SET = {
   sound: {
     on: true,      // 처음에 소리 켜 둘지
     se: true,      // 효과음 (타이틀 버튼 = 불협화음 울림, 게임 안 버튼 = 딸깍)
+    seAdv: true,   // 대사를 넘길 때(화면 클릭·Enter)도 딸깍 소리. 끄려면 false
     seVol: 0.6,    // 효과음 크기 0 ~ 1
     bgm1: 'bgm/before.mp3',      // 반전 전 BGM 파일 (예: 'bgm/before.mp3'). 비우면 BGM 없음
     bgm2: 'bgm/after.mp3',      // 반전 뒤 BGM. 비우면 bgm1이 계속 흐름
@@ -425,6 +431,7 @@ const SET = {
   slowPause: 380,     // 느린 속도일 때 「… , . ?」 뒤에서 한 번 더 쉬는 시간(ms). 0이면 안 쉼
   slowSkip: true,     // 느린 대사도 클릭하면 바로 다 나오게. false면 끝까지 기다려야 함
   overwrite: { wait:1100, erase:55, type:85 },  // [선택 … 덮어쓰기] 시작까지 기다림·지우는 속도·쓰는 속도(ms)
+  scar: { on:true, color:'#7d0614', draw:1600 },  // [CG 흉터]를 그림 없이 흰 바탕에 핏빛 줄 하나로 그림. color=핏빛(더 어둡게/밝게는 색 코드만 바꾸기), draw=그어지는 시간(ms). on:false면 회색 임시 판
   maxW: 860,          // 넓은 화면에서 게임 창 최대 폭(px)
   embedSignal: true,  // 러브로그용 신호 (마지막 장면에서 카테고리·위젯 열기). 컴퓨터에서 파일로 열어 볼 때는 false
   demoBar: false      // 아래 「시안 확인용」 줄 (장면 건너뛰기). 고치면서 확인할 때만 true
@@ -437,14 +444,16 @@ const SET = {
    주소를 비워 두면 회색 임시 판이 나옵니다.
    ═══════════════════════════════════════════════ */
 const IMG = {
-  '타이틀':     '',   // 타이틀 화면 그림 (4:3 가로)
-  '현관':       '',   // 배경: 오피스텔 현관
-  '거실':       '',   // 배경: 거실
-  '피아노':     '',   // 배경: 방 구석 전자피아노
-  '토와':       '',   // 서 있는 그림: 기본 (배경 투명 PNG)
-  '토와:웃음':  '',   // 서 있는 그림: 웃는 얼굴
-  '토와:무표정': '',  // 서 있는 그림: 표정 없음
-  '흉터':       '',   // 이벤트 그림(CG): 머플러가 풀린 목
+  '타이틀':     'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7i69c%2FdJMcahNoMnY%2FAAAAAAAAAAAAAAAAAAAAABcKuKjQ83D173Y-s4jYvX5ASS8Da9qce9OPsWuxMObu%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3DtwbKsXBqE2Beqik3r9Hy%252B04rqUQ%253D',   // 타이틀 화면 그림 (4:3 가로)
+  '현관':       'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbayBRi%2FdJMcair1Wjs%2FAAAAAAAAAAAAAAAAAAAAAJcDdY7yF6EG563u_DEYTiJ-M5OUvY-a9kWN2MjfE4Ih%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3DqA2yA2QQPEF2ikHm9MkojjwcGcw%253D',   // 배경: 오피스텔 현관
+  '거실':       'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FMP322%2FdJMb9921pM4%2FAAAAAAAAAAAAAAAAAAAAADUaiQJG4ntgoUOl5Q5el7kp0QFR6E6nMJQPIzr7a3lN%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D5GboL8fUGo67wHDs7Yp8jq23pus%253D',   // 배경: 거실
+  '거실:텅빔':       'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FMP322%2FdJMb9921pM4%2FAAAAAAAAAAAAAAAAAAAAADUaiQJG4ntgoUOl5Q5el7kp0QFR6E6nMJQPIzr7a3lN%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D5GboL8fUGo67wHDs7Yp8jq23pus%253Dhttps://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FMP322%2FdJMb9921pM4%2FAAAAAAAAAAAAAAAAAAAAADUaiQJG4ntgoUOl5Q5el7kp0QFR6E6nMJQPIzr7a3lN%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D5GboL8fUGo67wHDs7Yp8jq23pus%253D',   // 배경: 텅빈 거실.
+  '피아노':     'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FJ7fXH%2FdJMcabzE01z%2FAAAAAAAAAAAAAAAAAAAAAIriuGI5i2gUUwBey4Hixp42N0rBNcm9yJHkHVWo-Tls%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3DjeWVATYxX8SGsHKDI22t9bBykhA%253D',   // 배경: 방 구석 전자피아노
+  '토와':       'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fk0i04%2FdJMcahNoMnM%2FAAAAAAAAAAAAAAAAAAAAAE-OFqTbjz7tkmmELff2-q_6pEWCHQa48Gh0KhpAGMUI%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D41mxJX3U6FA6hDD69CYNh9WWWSY%253D',   // 서 있는 그림: 기본 (배경 투명 PNG)
+  '토와:웃음':  'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fk0i04%2FdJMcahNoMnM%2FAAAAAAAAAAAAAAAAAAAAAE-OFqTbjz7tkmmELff2-q_6pEWCHQa48Gh0KhpAGMUI%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D41mxJX3U6FA6hDD69CYNh9WWWSY%253D',   // 서 있는 그림: 웃는 얼굴
+  '토와:호러웃음': 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcEIzxs%2FdJMb9921pNA%2FAAAAAAAAAAAAAAAAAAAAAHS0TQzbt2MI2SPkcKbR6A9ZQRPtrA-lkfDXjLOlGOQo%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3DM8YtEaCyGq7T7gygDOM%252FK4M%252Fi9A%253D',   // 서 있는 그림: 섬뜩한 웃음
+  '토와:무표정': 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FCBKcC%2FdJMcaa1Skhc%2FAAAAAAAAAAAAAAAAAAAAAJGNRCzglONQX9Dfgh30EMEgZMIyMFUysy0OaqbM-A3h%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3Ddn6F9N1zzMaFdk4x06Fj7uknSFU%253D',  // 서 있는 그림: 표정 없음
+  '흉터':       '',   // 이벤트 그림(CG). 비워 두면 흰 바탕에 핏빛 줄이 자동으로 그어짐 (그림 주소를 적으면 그 그림이 우선)
 };
 
 /* ═══════════════════════════════════════════════
@@ -509,7 +518,7 @@ C♯. 손에 익은 첫 음이, 스피커를 타고 방 안에 번진다.
 등 뒤에서, 토와가 숨을 삼키는 소리가 들렸다.
 미오: 「요즘 보컬 반주만 맞추다 보니까, 생각나더라.」
 미오: 「그러고 보니 너, 옛날엔 곧잘 노래했잖아.」
-미오: 「요즘은 통 노래 관련된 얘기를 안 하네.」
+미오: 「요즘은 통 노래 관련된 얘기를 안 하네. 이제 노래 같은 건, 싫증 나 버린 거야?」
 [효과 차가움]
 토와: 「……」
 대답이 없다.
@@ -523,7 +532,7 @@ C♯. 손에 익은 첫 음이, 스피커를 타고 방 안에 번진다.
 도어록이 짧게 울리고, 문이 열린다.
 현관에 가지런히 놓인 낯익은 구두 한 켤레.
 ……이 구두를, 나는 아까도 보았던가.
-[배경 거실]
+[배경 거실:텅빔]
 [등장 토와:웃음]
 토와: 「어서 와, 오빠.」
 [효과 차가움]
@@ -537,7 +546,7 @@ C♯. 손에 익은 첫 음이, 스피커를 타고 방 안에 번진다.
 [효과 버튼잠금]
 [이름판 짧게]
 [배경 피아노]
-[등장 토와:무표정]
+[등장 토와:호러웃음]
 전자 피아노만이, 처음 그대로 거기 있었다.
 뽑아 두었던 헤드폰까지, 아까 그 자리에.
 [선택 토와에게 노래를 부탁한다 | 아무 말도 하지 않는다 덮어쓰기]
@@ -563,8 +572,8 @@ C♯. 손에 익은 첫 음이, 스피커를 타고 방 안에 번진다.
 토와: 「알잖아? ……아, 모르는구나.」
 토와: 「모르니까, 그런 말을 할 수 있구나.」
 [속도 보통]
-토와: 「괜찮아, 오빠. 화 안 났어.」
-토와: 「나 많이 차분해졌잖아. 오빠가 그랬잖아. 많이 차분해졌다고.」
+토와: 「괜찮아, 오빠. 아무렇지 않은걸.」
+토와: 「이게 내가 알던, 늘 그대로의 오빠 모습이니까.」
 [CG 끝]
 [효과 붉음]
 토와가 부엌으로 걸어간다. 정리된 서랍을, 망설임 없이 연다.
@@ -663,7 +672,38 @@ function paint(box, key, label){
 }
 paint($('tcg'), '타이틀', '타이틀 그림');
 function setBg(k){ BG.dataset.key = k; paint(BG, k, k ? '배경 · ' + k : '배경'); }
-function setCg(k){ G.classList.toggle('cgon', !!k); if (k){ CG.dataset.key = k; paint(CG, k, 'CG · ' + k); } }
+/* 흉터 — 그림 없이 흰 바탕에 대각선 핏빛 줄 하나. 가운데가 굵고 끝은 가늘며 가장자리는 살짝 거침 */
+function scarSvg(){
+  const P0=[205,92], P1=[392,214], P2=[612,368];            // 시작 · 휘는 점 · 끝 (800×600 기준)
+  const pt = t => [ (1-t)*(1-t)*P0[0]+2*(1-t)*t*P1[0]+t*t*P2[0], (1-t)*(1-t)*P0[1]+2*(1-t)*t*P1[1]+t*t*P2[1] ];
+  const nm = t => { const e=.001, a=pt(Math.max(0,t-e)), b=pt(Math.min(1,t+e)); const dx=b[0]-a[0], dy=b[1]-a[1], l=Math.hypot(dx,dy)||1; return [-dy/l, dx/l]; };
+  const L=[], R=[]; let seed=7; const rnd=()=>{ seed=(seed*16807)%2147483647; return seed/2147483647; };
+  for (let i=0;i<=60;i++){ const t=i/60, c=pt(t), n=nm(t), w=(Math.pow(Math.sin(Math.PI*t),.55)*5.2 + .35) * (.82 + rnd()*.36);
+    L.push([c[0]+n[0]*w, c[1]+n[1]*w]); R.push([c[0]-n[0]*w*(.85+rnd()*.3), c[1]-n[1]*w*(.85+rnd()*.3)]); }
+  const poly = L.concat(R.reverse()).map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' ');
+  const mid = 'M'+P0.join(',')+' Q'+P1.join(',')+' '+P2.join(',');
+  const col = SET.scar.color;
+  return `<svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <defs>
+      <filter id="scrough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".07" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+      <mask id="scmask" maskUnits="userSpaceOnUse" x="0" y="0" width="800" height="600"><path class="draw" d="${mid}" pathLength="1" fill="none" stroke="#fff" stroke-width="60" stroke-linecap="butt"/></mask>
+    </defs>
+    <g mask="url(#scmask)"><polygon points="${poly}" fill="${col}" filter="url(#scrough)"/></g>
+  </svg>`;
+}
+const BUILTIN_CG = { '흉터': scarSvg };
+function setCg(k){
+  G.classList.toggle('cgon', !!k);
+  CG.querySelectorAll('.scar').forEach(e => e.remove());
+  if (!k) return;
+  CG.dataset.key = k;
+  if (!IMG[k] && SET.scar.on && BUILTIN_CG[k]){       // 그림 주소가 없으면 직접 그림
+    const img = CG.querySelector('img'); if (img) img.remove();
+    CG.querySelector('.ph').hidden = true;
+    const w = document.createElement('div'); w.className = 'scar'; w.style.setProperty('--sd', SET.scar.draw + 'ms'); w.innerHTML = BUILTIN_CG[k](); CG.appendChild(w); return;
+  }
+  paint(CG, k, 'CG · ' + k);
+}
 function setStands(list){
   [stL, stR].forEach(e => { e.hidden = true; e.classList.remove('solo','dim'); e.dataset.who=''; });
   list.forEach((item, n) => { const el = n ? stR : stL; const who = item.split(':')[0];
@@ -862,14 +902,15 @@ function endScene(s){
 }
 function advance(){
   if (anyOv() || st.dlgOpen || st.busy) return;
-  if (G.classList.contains('hidew')){ G.classList.remove('hidew'); return; }
+  const tap = () => { if (SET.sound.seAdv) seClick(); };   // 대사 넘길 때 딸깍
+  if (G.classList.contains('hidew')){ tap(); G.classList.remove('hidew'); return; }
   const m = G.dataset.mode;
   if (m==='title' || CH.classList.contains('on')) return;
-  if (st.eyeOn){ endEye(); return; }
-  if (FL.classList.contains('on')){ if (st.flooding){ clearInterval(st.flood_t); while (FL.scrollHeight <= FL.clientHeight + 4 && FL.childNodes.length < 400){ const sp=document.createElement('span'); sp.textContent=SCRIPT[st.i].s; if (Math.random()<.22) sp.className='r'; FL.appendChild(sp); } st.flooding=false; st.wait=true; } else endFlood(); return; }
-  if (m==='end'){ wipe('#fff', showTitle); return; }
-  if (st.typing){ if (st.slowK && !SET.slowSkip) return; finishType(); return; }
-  if (st.wait) next();
+  if (st.eyeOn){ tap(); endEye(); return; }
+  if (FL.classList.contains('on')){ tap(); if (st.flooding){ clearInterval(st.flood_t); while (FL.scrollHeight <= FL.clientHeight + 4 && FL.childNodes.length < 400){ const sp=document.createElement('span'); sp.textContent=SCRIPT[st.i].s; if (Math.random()<.22) sp.className='r'; FL.appendChild(sp); } st.flooding=false; st.wait=true; } else endFlood(); return; }
+  if (m==='end'){ tap(); wipe('#fff', showTitle); return; }
+  if (st.typing){ if (st.slowK && !SET.slowSkip) return; tap(); finishType(); return; }
+  if (st.wait){ tap(); next(); }
 }
 G.addEventListener('click', e => { if (e.target.closest('button,.ov')) return; advance(); });
 G.addEventListener('keydown', e => { if ((e.key==='Enter' || e.key===' ') && e.target===G){ e.preventDefault(); advance(); } });
