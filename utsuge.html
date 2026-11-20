@@ -454,6 +454,7 @@ const SET = {
   scar: { on:true, color:'#7d0614', draw:1600 },  // [CG 흉터]를 그림 없이 흰 바탕에 핏빛 줄 하나로 그림. color=핏빛(더 어둡게/밝게는 색 코드만 바꾸기), draw=그어지는 시간(ms). on:false면 회색 임시 판
   offBlock: { on:true, msgs:['시스템을 종료할 수 없습니다.', '종료할 수 없습니다.\n아직 노래가 끝나지 않았습니다.', '어디 가, 오빠?'] },
                       // 작업 표시줄 「시작 → 시스템 종료」를 눌러도 꺼지지 않고 이 문구가 차례로 뜸(마지막 문구는 반복). on:false면 원래대로 꺼짐
+  errSe: { on:true, when:'broken' },   // 반전 뒤(화면이 어두워진 뒤) 게임 창 닫기 ✕ · 시스템 종료를 누르면 윈도 에러음. when:'always' = 처음부터 항상. 끄려면 on:false
   cursor: { url:'img/cursor-butterfly.png', x:39, y:42 },   // 게임 화면 안 마우스 커서(그림 주소, 끝점 x·y). 끄려면 url:''
                       // 커서: Butterfly Black — https://www.cursors-4u.com/cursor/butterfly-black
   once: { on:true, mode:'open', key:'v1', scope:'tab' },   // scope: 'device'=이 기기·브라우저에서 한 번 보면 계속 / 'day'=같은 날만(날짜가 바뀌면 다시) / 'tab'=그 탭만(탭을 닫으면 다시)
@@ -598,7 +599,6 @@ C♯. 손에 익은 첫 음이, 스피커를 타고 방 안에 번진다.
 선반 위의 액자만이, 하나도 빠짐없이 엎어져 있었다.
 [효과 어둠]
 [효과 버튼잠금]
-[이름판 짧게]
 [배경 피아노]
 전자 피아노만이, 처음 그대로 거기 있었다.
 뽑아 두었던 헤드폰까지, 아까 그 자리에.
@@ -873,6 +873,15 @@ function seChime(){
     o.connect(e); e.connect(out); o.start(t); o.stop(t+2.9);
   });
 }
+function seError(){   // 윈도 에러음 — 짧게 높았다가 내려앉는 두 음
+  const c = ac(); if (!c || !SET.sound.se || MUTED) return; const t = c.currentTime;
+  const lp = c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value = 2600; lp.connect(AU.master);
+  [[987.77,0,.11],[739.99,.1,.5]].forEach(([f,at,len]) => { [0,-7].forEach(dt => {
+    const o = c.createOscillator(); o.type='square'; o.frequency.value = f; o.detune.value = dt;
+    const e = c.createGain(); e.gain.setValueAtTime(0,t+at); e.gain.linearRampToValueAtTime(SET.sound.seVol*.07,t+at+.005); e.gain.exponentialRampToValueAtTime(.0004,t+at+len);
+    o.connect(e); e.connect(lp); o.start(t+at); o.stop(t+at+len+.02); }); });
+}
+const errNow = () => SET.errSe && SET.errSe.on && (SET.errSe.when === 'always' || st.broken || st.ended || /nvl|end/.test(G.dataset.mode||''));
 function seClick(){
   const c = ac(); if (!c || !SET.sound.se || MUTED) return; const t = c.currentTime;
   const o = c.createOscillator(); o.type='triangle'; o.frequency.setValueAtTime(1500,t); o.frequency.exponentialRampToValueAtTime(880,t+.05);
@@ -1091,6 +1100,7 @@ function closeWin(w){ w.dataset.state='closed'; w.hidden=true; w.classList.add('
 Object.entries(tasks).forEach(([id,b]) => b.onclick = () => { const w=$(id);
   if (w.dataset.state!=='open') openWin(w); else if (!w.classList.contains('inact')) minWin(w); else activate(w); });
 function closeGame(){
+  if (errNow()) seError();
   if (st.ended){ sysDlg({ title:SET.windowTitle, msg:'아직 끝나지 않았습니다.', icon:'!', buttons:[{t:'확인'}] }); return; }
   sysDlg({ title:SET.windowTitle, msg:'게임을 종료하시겠습니까?', buttons:[{t:'예'},{t:'아니오'}] }).then(i => { if (i===0){ closeWin(wGame); showTitle(); } });
 }
@@ -1172,6 +1182,7 @@ SM.addEventListener('click', e => { const b=e.target.closest('[data-sm]'); if (!
   else if (k==='off'){
     if (!SET.offBlock || !SET.offBlock.on){ $('off').hidden=false; clearTimers(); bgm(null); return; }
     const L = SET.offBlock.msgs || ['시스템을 종료할 수 없습니다.'], n = Math.min(offTry++, L.length - 1);
+    if (errNow()) seError();
     sysDlg({ title:'시스템 종료', msg:L[n], icon:'!', buttons:[{t:'확인'}], lockX: n === L.length - 1 });
   }
 });
