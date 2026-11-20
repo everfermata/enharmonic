@@ -451,6 +451,8 @@ const SET = {
   scar: { on:true, color:'#7d0614', draw:1600 },  // [CG 흉터]를 그림 없이 흰 바탕에 핏빛 줄 하나로 그림. color=핏빛(더 어둡게/밝게는 색 코드만 바꾸기), draw=그어지는 시간(ms). on:false면 회색 임시 판
   offBlock: { on:true, msgs:['시스템을 종료할 수 없습니다.', '종료할 수 없습니다.\n아직 노래가 끝나지 않았습니다.', '어디 가, 오빠?'] },
                       // 작업 표시줄 「시작 → 시스템 종료」를 눌러도 꺼지지 않고 이 문구가 차례로 뜸(마지막 문구는 반복). on:false면 원래대로 꺼짐
+  preload: true,      // 처음 열 때 그림을 전부 미리 불러 둠 → 장면이 바뀔 때 바로 뜸. 끄려면 false
+  showPh: false,      // 그림 주소를 비워 둔 칸에 회색 「(임시)」 판을 보여 줄지. 새 그림 자리를 확인할 때만 true
   maxW: 860,          // 넓은 화면에서 게임 창 최대 폭(px)
   embedSignal: true,  // 러브로그용 신호 (마지막 장면에서 카테고리·위젯 열기). 컴퓨터에서 파일로 열어 볼 때는 false
   demoBar: false      // 아래 「시안 확인용」 줄 (장면 건너뛰기). 고치면서 확인할 때만 true
@@ -740,17 +742,22 @@ function paint(box, key, label, fade){
   const drop = () => olds.forEach(o => { o.dataset.going = '1'; if (!fade){ o.remove(); return; }
     if (stand) o.classList.remove('on'); setTimeout(() => o.remove(), fade + 60); });
   const tryUrl = (url, alt) => {
-    if (!url){ ph.textContent = (label || key || '') + ' (임시)'; ph.hidden = false; drop(); return; }
+    if (!url){ ph.textContent = (label || key || '') + ' (임시)'; ph.hidden = !(SET.showPh && key); drop(); return; }
+    ph.hidden = true;                                   // 주소가 있으면 불러오는 동안 판을 보이지 않음
     const im = new Image(); im.alt = ''; im.decoding = 'async'; im.style.setProperty('--fd', fade + 'ms'); setPos(im, key, stand);
     im.onload = () => { if (box.dataset.key !== key) return; box.appendChild(im); drop();
       requestAnimationFrame(() => requestAnimationFrame(() => im.classList.add('on')));
       setTimeout(() => { if (box.dataset.key === key) ph.hidden = true; }, fade + 30); };
-    im.onerror = () => { if (box.dataset.key !== key) return; console.warn('[그림] 불러오기 실패:', key); tryUrl(alt, ''); };   // 깨지면 기본 그림 → 회색 판
+    im.onerror = () => { if (box.dataset.key !== key) return; console.warn('[그림] 불러오기 실패:', key); tryUrl(alt, ''); };   // 깨지면 기본 그림으로
     im.src = url;
   };
   const own = IMG[key], base = IMG[String(key).split(':')[0]];
   tryUrl(own || base || '', own && base && base !== own ? base : '');
 }
+/* 그림 미리 불러오기 — 한 번 받아 두면 장면이 바뀔 때 기다리지 않음 */
+const PRE = [];
+if (SET.preload) [...new Set(Object.values(IMG).filter(Boolean))].forEach(u => { const im = new Image(); im.decoding = 'async'; im.src = u; PRE.push(im); });
+document.querySelectorAll('.game .ph').forEach(ph => { if (!SET.showPh) ph.hidden = true; });
 paint($('tcg'), '타이틀', '타이틀 그림', SET.fade.bg);
 function setBg(k, quick){ paint(BG, k, k ? '배경 · ' + k : '배경', quick ? 0 : SET.fade.bg); }
 /* 흉터 — 그림 없이 흰 바탕에 대각선 핏빛 줄 하나. 가운데가 굵고 끝은 가늘며 가장자리는 살짝 거침 */
