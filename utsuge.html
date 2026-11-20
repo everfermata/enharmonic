@@ -456,7 +456,7 @@ const SET = {
                       // 작업 표시줄 「시작 → 시스템 종료」를 눌러도 꺼지지 않고 이 문구가 차례로 뜸(마지막 문구는 반복). on:false면 원래대로 꺼짐
   cursor: { url:'img/cursor-butterfly.png', x:39, y:42 },   // 게임 화면 안 마우스 커서(그림 주소, 끝점 x·y). 끄려면 url:''
                       // 커서: Butterfly Black — https://www.cursors-4u.com/cursor/butterfly-black
-  once: { on:true, mode:'open', key:'v1', scope:'device' },   // scope: 'device'=이 기기·브라우저에서 한 번 보면 계속 / 'day'=같은 날만(날짜가 바뀌면 다시) / 'tab'=그 탭만(탭을 닫으면 다시)
+  once: { on:true, mode:'open', key:'v1', scope:'tab' },   // scope: 'device'=이 기기·브라우저에서 한 번 보면 계속 / 'day'=같은 날만(날짜가 바뀌면 다시) / 'tab'=그 탭만(탭을 닫으면 다시)
                       // 끝까지 한 번 본 방문자는 다음부터 —  mode 'hide' = 게임 칸이 사라짐(다크 CSS 두 줄 필요) / 'open' = 게임은 남기고 카테고리·위젯이 처음부터 열림
                       // 모두에게 다시 보이게 하려면 key 를 'v2' 처럼 바꾸기. 이 기능을 끄려면 on:false
   preload: true,      // 처음 열 때 그림을 전부 미리 불러 둠 → 장면이 바뀔 때 바로 뜸. 끄려면 false
