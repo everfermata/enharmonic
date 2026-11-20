@@ -6,13 +6,15 @@
 <title>澪標</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Zen+Kaku+Gothic+New:wght@500;700&family=Gothic+A1:wght@400;700;800&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --w-face:#c0c0c0; --w-hi:#ffffff; --w-lt:#dfdfdf; --w-sh:#808080; --w-dk:#0a0a0a;
   --desk:#1b1b1d; --ink:#141416; --red:#c8102e; --red-d:#e3324d;
   --kr:"Nanum Gothic","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  --logo:"Zen Maru Gothic","Nanum Gothic",sans-serif;
+  --logo:"Zen Kaku Gothic New","Nanum Gothic",sans-serif;   /* 제목·메뉴 (SET.font.title 로 바뀜) */
+  --txt:"Gothic A1","Nanum Gothic",sans-serif;              /* 대사·이름·선택지 (SET.font.text) */
+  --flood:"Nanum Myeongjo",serif;                           /* [반복] 글 (SET.font.flood) */
   --out:inset -1px -1px var(--w-dk),inset 1px 1px var(--w-hi),inset -2px -2px var(--w-sh),inset 2px 2px var(--w-lt);
   --in:inset 1px 1px var(--w-dk),inset -1px -1px var(--w-hi),inset 2px 2px var(--w-sh),inset -2px -2px var(--w-lt);
   --sunk:inset 1px 1px var(--w-sh),inset -1px -1px var(--w-hi),inset 2px 2px var(--w-dk),inset -2px -2px var(--w-lt);
@@ -102,11 +104,19 @@ button{font:inherit;color:inherit}
 .ph{position:absolute;inset:0;display:grid;place-items:center;background:#e4e5e8;color:#9a9da3;font-size:12px;letter-spacing:.1em}
 .bg{transition:filter 1.2s}
 .bg img,.tcg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.st{position:absolute;bottom:0;width:32%;height:84%;opacity:0;transition:opacity .5s,filter .3s}
+/* 그림 위치(POS) — x·y = 보이는 부분, zoom = 크기 */
+.bg img,.tcg img,.cg img{object-position:var(--px,50%) var(--py,50%);transform:scale(var(--pz,1));transform-origin:var(--px,50%) var(--py,50%)}
+/* 그림이 바뀔 때 서서히 겹침 */
+.bg img,.tcg img,.cg img,.st img{opacity:0;transition:opacity var(--fd,600ms) ease}
+.bg img.on,.tcg img.on,.cg img.on,.st img.on{opacity:1}
+.st{position:absolute;bottom:0;width:32%;height:84%;opacity:0;transform:translateY(1.6%);transform-origin:var(--zo,50% 30%);
+  transition:opacity var(--sf,450ms) ease,transform var(--sf,450ms) ease,filter .3s}
 #stL{left:12%} #stR{right:12%}
 .st .ph{background:rgba(196,199,204,.55);border-radius:2px;align-items:start;padding-top:28%}
-.st img{position:absolute;bottom:0;left:50%;height:100%;width:auto;max-width:none;transform:translateX(-50%)}
-.game.stands[data-mode=play] .st{opacity:1}
+.st img{position:absolute;bottom:0;left:50%;height:100%;width:auto;max-width:none;transform:translate(calc(-50% + var(--sx,0%)),var(--sy,0%)) scale(var(--pz,1));transform-origin:50% 100%}
+.game[data-mode=play] .st.show{opacity:1;transform:none}
+/* [확대] 얼굴 쪽으로 다가옴 */
+.game[data-mode=play] .st.show.zoom{transform:translateY(var(--zy,-5%)) scale(var(--zs,2.2));transition:opacity var(--sf,450ms) ease,transform var(--zt,900ms) cubic-bezier(.2,.75,.2,1),filter .3s}
 .st.dim{filter:brightness(.82)}
 .game.cold .bg{filter:brightness(.84) contrast(1.06) saturate(.6)}
 .game.cold .st{filter:brightness(.76) saturate(.6)}
@@ -118,7 +128,7 @@ button{font:inherit;color:inherit}
 .game.dark .cal,.game.red .cal{color:var(--red);border-color:var(--red)}
 
 /* 대사창 — 화면 아래를 가로로 덮는 흰 그라데이션 띠 */
-.msg{position:absolute;left:0;right:0;bottom:0;height:33%;z-index:3;display:none;padding:3.6cqw 9% 6cqw;
+.msg{position:absolute;left:0;right:0;bottom:0;height:33%;z-index:3;display:none;padding:3.6cqw 9% 6cqw;font-family:var(--txt);
   background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.74) 24%,rgba(255,255,255,.9) 62%,rgba(255,255,255,.94))}
 .game[data-mode=play] .msg{display:block}
 .who{display:flex;align-items:center;gap:.7em;height:1.4em;margin-bottom:.3em;font-weight:800;font-size:clamp(11px,1.75cqw,16px);letter-spacing:.14em;color:#1b1b1d;
@@ -135,10 +145,10 @@ button{font:inherit;color:inherit}
 .game.hidew .msg,.game.hidew .qm,.game.hidew .cal{visibility:hidden}
 
 /* 이벤트 그림(CG) — 화면 전체 */
-.cg{position:absolute;inset:0;z-index:1;display:none}
+.cg{position:absolute;inset:0;z-index:1;opacity:0;visibility:hidden;transition:opacity var(--cf,600ms) ease,visibility 0s linear var(--cf,600ms)}
 .cg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.game.cgon .cg{display:block}
-.game.cgon .st{opacity:0!important}
+.game.cgon .cg{opacity:1;visibility:visible;transition:opacity var(--cf,600ms) ease}
+.game.cgon .st{opacity:0!important;transition:opacity var(--cf,600ms) ease}
 .st.solo{left:34%!important;right:auto!important}
 
 .scar{position:absolute;inset:0;background:#fff}
@@ -159,11 +169,11 @@ button{font:inherit;color:inherit}
 .tint{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity 3.2s ease;mix-blend-mode:multiply;
   background:radial-gradient(ellipse 70% 62% at 50% 42%,rgba(255,255,255,0),rgba(40,0,6,.62)),#a3001b}
 .game.red .tint{opacity:.9}
-.game.red .st{filter:brightness(0)!important;transition:filter 2.6s ease,opacity .5s}
+.game.red .st{filter:brightness(0)!important;transition:filter 2.6s ease,opacity .5s,transform var(--zt,900ms) cubic-bezier(.2,.75,.2,1)}
 .game.red .st .ph{color:transparent}
 /* 반복: 같은 말이 화면을 가득 메움 */
 .flood{position:absolute;inset:0;z-index:8;display:none;padding:3cqw 4cqw;overflow:hidden;background:rgba(5,5,7,.5);
-  font-weight:800;font-size:clamp(13px,2.3cqw,21px);line-height:1.55;color:#f4f4f6;word-break:keep-all}
+  font-family:var(--flood);font-weight:400;font-size:clamp(14px,2.45cqw,22px);line-height:1.5;letter-spacing:.03em;color:#f4f4f6;word-break:keep-all}
 .flood.on{display:block}
 .flood span{display:inline-block;margin-right:.55em;white-space:nowrap}
 .flood span.r{color:var(--red-d)}
@@ -182,7 +192,7 @@ button{font:inherit;color:inherit}
 /* 선택지 */
 .choice{position:absolute;inset:0;z-index:5;display:none;flex-direction:column;justify-content:center;align-items:center;gap:2.2cqw;padding-bottom:8%;background:rgba(255,255,255,.28)}
 .choice.on{display:flex}
-.choice button{position:relative;width:60%;padding:1.3cqw 0;font-family:var(--kr);font-weight:700;font-size:clamp(13px,2.1cqw,19px);letter-spacing:.06em;
+.choice button{position:relative;width:60%;padding:1.3cqw 0;font-family:var(--txt);font-weight:700;font-size:clamp(13px,2.1cqw,19px);letter-spacing:.06em;
   background:linear-gradient(90deg,rgba(255,255,255,.35),rgba(255,255,255,.95) 18%,rgba(255,255,255,.95) 82%,rgba(255,255,255,.35));border:0;border-top:1px solid #2a2a2d;border-bottom:1px solid #2a2a2d;color:#141416;cursor:pointer}
 .choice button:hover,.choice button:focus-visible{background:#1b1b1d;color:#fff;outline:0}
 .choice button.ow::after{content:"";display:inline-block;width:.08em;height:1.05em;margin-left:.12em;vertical-align:-.15em;background:var(--red)}  /* 덮어쓰는 중 커서 */
@@ -223,7 +233,7 @@ button{font:inherit;color:inherit}
 .ver{position:absolute;left:8%;bottom:4.5%;font-size:clamp(10px,1.2cqw,11px);letter-spacing:.1em;color:#8a8d93}
 
 /* 반전 뒤: 화면 가득 글 */
-.nvl{position:absolute;inset:0;z-index:7;display:none;padding:8cqw 10cqw;background:rgba(7,7,9,.9);color:#f1f1f3;
+.nvl{position:absolute;inset:0;z-index:7;display:none;padding:8cqw 10cqw;background:rgba(7,7,9,.9);color:#f1f1f3;font-family:var(--txt);
   font-weight:700;font-size:clamp(13px,2.3cqw,21px);line-height:2.15;letter-spacing:.04em;word-break:keep-all}
 .game[data-mode=nvl] .nvl,.game[data-mode=end] .nvl{display:block}
 .game[data-mode=nvl] .bg,.game[data-mode=end] .bg{filter:brightness(.35) saturate(.4)}
@@ -261,6 +271,8 @@ button{font:inherit;color:inherit}
   .qm button{font-size:10px;padding:0 .7em;height:22px}
   .cal{font-size:11px}
   .tcg{width:100%}
+  .st{--zy:-30%}   /* 폰: 확대할 때 얼굴을 대사창 위로 올림 */
+  .bg img,.tcg img,.cg img{object-position:var(--pmx,var(--px,50%)) var(--pmy,var(--py,50%));transform-origin:var(--pmx,var(--px,50%)) var(--pmy,var(--py,50%))}
   .tcg::after{background:linear-gradient(0deg,#fff 22%,rgba(255,255,255,.2) 62%)}
   .staff{right:10%;top:15%;height:calc(12cqw + 1px);background-image:repeating-linear-gradient(to bottom,#111 0 1px,transparent 1px 3cqw)}
   .logo{top:12%}
@@ -407,7 +419,7 @@ button{font:inherit;color:inherit}
 </div>
 
 <script>
-/* 澪標 utsuge.html — 수정본1 (2026-11-20) · GitHub 저장소 enharmonic 맨 위에 이 이름 그대로 올립니다 */
+/* 澪標 utsuge.html — 수정본5 (2026-11-20) · 그림은 같은 저장소 img 폴더 · GitHub 저장소 enharmonic 맨 위에 이 이름 그대로 올립니다 */
 /* ═══════════════════════════════════════════════
    1. 기본 설정 — 제목·이름·소리
    주의: 따옴표 '…' 와 쉼표 , 를 지우면 화면이 멈춥니다.
@@ -431,6 +443,11 @@ const SET = {
   slowPause: 380,     // 느린 속도일 때 「… , . ?」 뒤에서 한 번 더 쉬는 시간(ms). 0이면 안 쉼
   slowSkip: true,     // 느린 대사도 클릭하면 바로 다 나오게. false면 끝까지 기다려야 함
   overwrite: { wait:1100, erase:55, type:85 },  // [선택 … 덮어쓰기] 시작까지 기다림·지우는 속도·쓰는 속도(ms)
+  fade: { bg:700, stand:450, cg:600 },  // 장면이 바뀔 때 서서히 겹치는 시간(ms) — 배경 · 서 있는 그림 · CG. 0이면 바로 바뀜
+  zoom: { scale:2.2, time:900, delay:250, focus:'50% 30%' },  // [확대] 기본 배율 · 다가오는 시간(ms) · 등장 후 시작까지(ms) · 확대 중심(가로% 세로%, 얼굴 위치)
+  font: { title:'Zen Kaku Gothic New', text:'Gothic A1', flood:'Nanum Myeongjo' },
+                      // 글꼴(구글 폰트 이름). title=제목·메뉴, text=대사·이름·선택지, flood=[반복] 글
+                      // 다른 후보 — 딱딱한 고딕: 'IBM Plex Sans KR' / 옛 명조: 'Song Myung', 'Noto Serif KR'
   scar: { on:true, color:'#7d0614', draw:1600 },  // [CG 흉터]를 그림 없이 흰 바탕에 핏빛 줄 하나로 그림. color=핏빛(더 어둡게/밝게는 색 코드만 바꾸기), draw=그어지는 시간(ms). on:false면 회색 임시 판
   maxW: 860,          // 넓은 화면에서 게임 창 최대 폭(px)
   embedSignal: true,  // 러브로그용 신호 (마지막 장면에서 카테고리·위젯 열기). 컴퓨터에서 파일로 열어 볼 때는 false
@@ -444,16 +461,32 @@ const SET = {
    주소를 비워 두면 회색 임시 판이 나옵니다.
    ═══════════════════════════════════════════════ */
 const IMG = {
-  '타이틀':     'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7i69c%2FdJMcahNoMnY%2FAAAAAAAAAAAAAAAAAAAAABcKuKjQ83D173Y-s4jYvX5ASS8Da9qce9OPsWuxMObu%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3DtwbKsXBqE2Beqik3r9Hy%252B04rqUQ%253D',   // 타이틀 화면 그림 (4:3 가로)
-  '현관':       'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbayBRi%2FdJMcair1Wjs%2FAAAAAAAAAAAAAAAAAAAAAJcDdY7yF6EG563u_DEYTiJ-M5OUvY-a9kWN2MjfE4Ih%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3DqA2yA2QQPEF2ikHm9MkojjwcGcw%253D',   // 배경: 오피스텔 현관
-  '거실':       'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FMP322%2FdJMb9921pM4%2FAAAAAAAAAAAAAAAAAAAAADUaiQJG4ntgoUOl5Q5el7kp0QFR6E6nMJQPIzr7a3lN%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D5GboL8fUGo67wHDs7Yp8jq23pus%253D',   // 배경: 거실
-  '거실:텅빔':       'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FMP322%2FdJMb9921pM4%2FAAAAAAAAAAAAAAAAAAAAADUaiQJG4ntgoUOl5Q5el7kp0QFR6E6nMJQPIzr7a3lN%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D5GboL8fUGo67wHDs7Yp8jq23pus%253Dhttps://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FMP322%2FdJMb9921pM4%2FAAAAAAAAAAAAAAAAAAAAADUaiQJG4ntgoUOl5Q5el7kp0QFR6E6nMJQPIzr7a3lN%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D5GboL8fUGo67wHDs7Yp8jq23pus%253D',   // 배경: 텅빈 거실.
-  '피아노':     'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FJ7fXH%2FdJMcabzE01z%2FAAAAAAAAAAAAAAAAAAAAAIriuGI5i2gUUwBey4Hixp42N0rBNcm9yJHkHVWo-Tls%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3DjeWVATYxX8SGsHKDI22t9bBykhA%253D',   // 배경: 방 구석 전자피아노
-  '토와':       'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fk0i04%2FdJMcahNoMnM%2FAAAAAAAAAAAAAAAAAAAAAE-OFqTbjz7tkmmELff2-q_6pEWCHQa48Gh0KhpAGMUI%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D41mxJX3U6FA6hDD69CYNh9WWWSY%253D',   // 서 있는 그림: 기본 (배경 투명 PNG)
-  '토와:웃음':  'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fk0i04%2FdJMcahNoMnM%2FAAAAAAAAAAAAAAAAAAAAAE-OFqTbjz7tkmmELff2-q_6pEWCHQa48Gh0KhpAGMUI%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3D41mxJX3U6FA6hDD69CYNh9WWWSY%253D',   // 서 있는 그림: 웃는 얼굴
-  '토와:호러웃음': 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcEIzxs%2FdJMb9921pNA%2FAAAAAAAAAAAAAAAAAAAAAHS0TQzbt2MI2SPkcKbR6A9ZQRPtrA-lkfDXjLOlGOQo%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3DM8YtEaCyGq7T7gygDOM%252FK4M%252Fi9A%253D',   // 서 있는 그림: 섬뜩한 웃음
-  '토와:무표정': 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FCBKcC%2FdJMcaa1Skhc%2FAAAAAAAAAAAAAAAAAAAAAJGNRCzglONQX9Dfgh30EMEgZMIyMFUysy0OaqbM-A3h%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1796050799%26allow_ip%3D%26allow_referer%3D%26signature%3Ddn6F9N1zzMaFdk4x06Fj7uknSFU%253D',  // 서 있는 그림: 표정 없음
+  '타이틀':     'img/title.jpg',   // 타이틀 화면 그림 (4:3 가로)
+  '현관':       'img/genkan.jpg',   // 배경: 오피스텔 현관
+  '거실':       'img/living.jpg',   // 배경: 거실
+  '거실:텅빔':       'img/living-empty.jpg',   // 배경: 텅빈 거실.
+  '피아노':     'img/piano.jpg',   // 배경: 방 구석 전자피아노
+  '토와':       'img/towa.png',   // 서 있는 그림: 기본 (배경 투명 PNG)
+  '토와:웃음':  'img/towa.png',   // 서 있는 그림: 웃는 얼굴
+  '토와:호러웃음': 'img/towa-horror.png',   // 서 있는 그림: 섬뜩한 웃음
+  '토와:무표정': 'img/towa.png',  // 서 있는 그림: 표정 없음
   '흉터':       '',   // 이벤트 그림(CG). 비워 두면 흰 바탕에 핏빛 줄이 자동으로 그어짐 (그림 주소를 적으면 그 그림이 우선)
+};
+
+/* ═══════════════════════════════════════════════
+   2-1. 그림 위치 — 잘려 보이는 그림만 적으면 됩니다 (그림을 따로 자르지 않아도 됨)
+   배경·타이틀·CG
+     x : 가로로 어디를 보여 줄지 0(왼쪽 끝) ~ 100(오른쪽 끝)   기본 50(가운데)
+     y : 세로로 어디를 보여 줄지 0(위 끝) ~ 100(아래 끝)       기본 50
+     zoom : 크기 1 = 그대로, 1.2 = 20% 크게 (1보다 작게 하면 빈 곳이 생김)
+     폰x, 폰y : 폰(세로 화면)에서만 따로 정할 때. 안 적으면 x·y를 그대로 씀
+   서 있는 그림
+     x : 옆으로 옮기기(그림 폭의 %, 예: -5 = 조금 왼쪽)   y : 아래로 내리기(그림 높이의 %, 예: 8)
+     zoom : 크기 (발밑 기준)
+   이름 뒤 :표정 없이 '토와' 로 적으면 토와의 모든 표정에 같이 적용됩니다.
+   ═══════════════════════════════════════════════ */
+const POS = {
+  '타이틀': { x:95, y:50 },   // 오른쪽 끝(남자 얼굴)까지 보이게
 };
 
 /* ═══════════════════════════════════════════════
@@ -463,6 +496,9 @@ const IMG = {
    ─ [[글자]]                → 그 글자만 진홍색
    ─ [날짜 6월 14일 (토)]     → 장면 전환 + 날짜 화면 ( 끝에 「반복」을 붙이면 고장 버전 )
    ─ [배경 이름]  [등장 미오 토와]  [등장 토와]  [퇴장]
+   ─ [확대 토와:호러웃음]       → 그 그림이 나온 뒤 얼굴 쪽으로 크게 다가옴 (배율 기본 2.2)
+     [확대 토와:호러웃음 2.8]   → 배율을 직접 정함        [확대 끝] → 원래 크기로
+     ( 다음 [등장] [퇴장] 을 만나도 원래 크기로 돌아옵니다 )
    ─ [CG 이름]   [CG 끝]
    ─ [선택 고르기1 | 고르기2]    → 어느 쪽을 골라도 다음 줄로
    ─ [선택 고르기1 | 고르기2 덮어쓰기]
@@ -638,6 +674,7 @@ const SCRIPT = (() => {
       else if (c==='배경') out.push({ t:'bg', k:arg });
       else if (c==='등장') out.push({ t:'stand', list:arg.split(/\s+/).filter(Boolean).slice(0,2) });
       else if (c==='퇴장') out.push({ t:'stand', list:[] });
+      else if (c==='확대') out.push({ t:'zoom', k:arg });
       else if (c==='CG') out.push({ t:'cg', k: arg==='끝' ? '' : arg });
       else if (c==='선택'){ const ow = /\s덮어쓰기$/.test(arg); out.push({ t:'choice', ow, a:arg.replace(/\s덮어쓰기$/,'').split('|').map(x => x.trim()).filter(Boolean) }); }
       else if (c==='속도') out.push({ t:'speed', k:arg });
@@ -663,20 +700,49 @@ let MUTED = (() => { try { const v = localStorage.getItem('mio-vn-mute'); return
 const st = { i:-1, typing:false, wait:false, ended:false, broken:false, busy:false, dlgOpen:false, eyeOn:false, flooding:false,
              curDate:'', tk:[], pending:false, timer:0, eye_t:0, speed:SET.speed, slowK:'', plate:'', ow_t:0 };
 
+/* 글꼴 — SET.font 에 적은 구글 폰트를 불러와 씀 */
+(() => { const F = SET.font || {}, have = ['Zen Kaku Gothic New','Gothic A1','Nanum Myeongjo','Nanum Gothic'];
+  const use = (v, name, fb) => { if (!name) return; document.documentElement.style.setProperty(v, `"${name}",${fb}`);
+    if (have.includes(name)) return; const l = document.createElement('link'); l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=' + name.trim().replace(/ /g,'+') + '&display=swap'; document.head.appendChild(l); };
+  use('--logo', F.title, '"Nanum Gothic",sans-serif');
+  use('--txt', F.text, '"Nanum Gothic",sans-serif');
+  use('--flood', F.flood, 'serif'); })();
 $('logoSub').textContent = SET.gameSub; $('eyeSub').textContent = SET.gameSub; $('nbody').textContent = README;
 
-/* 그림 넣기 — 주소가 없거나 깨지면 이름이 적힌 회색 판 */
-function paint(box, key, label){
-  const old = box.querySelector('img'); if (old) old.remove();
-  const ph = box.querySelector('.ph'); ph.hidden = false; ph.textContent = (label || key || '') + ' (임시)';
-  const url = IMG[key] || IMG[String(key).split(':')[0]];
-  if (!url) return;
-  const im = new Image(); im.alt = ''; im.decoding = 'async';
-  im.onload = () => { if (box.dataset.key !== key) return; box.appendChild(im); ph.hidden = true; };
-  box.dataset.key = key; im.src = url;
+/* 그림 넣기 — 주소가 없거나 깨지면 이름이 적힌 회색 판. 바뀔 때는 서서히 겹침 */
+const urlOf = k => IMG[k] || IMG[String(k).split(':')[0]] || '';
+const posOf = k => POS[k] || POS[String(k).split(':')[0]] || null;
+function setPos(im, key, stand){
+  const p = posOf(key); if (!p) return; const n = v => v !== undefined && v !== '' && !isNaN(+v);
+  if (stand){ if (n(p.x)) im.style.setProperty('--sx', +p.x + '%'); if (n(p.y)) im.style.setProperty('--sy', +p.y + '%'); }
+  else { if (n(p.x)) im.style.setProperty('--px', +p.x + '%'); if (n(p.y)) im.style.setProperty('--py', +p.y + '%');
+         if (n(p['폰x'])) im.style.setProperty('--pmx', +p['폰x'] + '%'); if (n(p['폰y'])) im.style.setProperty('--pmy', +p['폰y'] + '%'); }
+  if (n(p.zoom)) im.style.setProperty('--pz', +p.zoom);
 }
-paint($('tcg'), '타이틀', '타이틀 그림');
-function setBg(k){ BG.dataset.key = k; paint(BG, k, k ? '배경 · ' + k : '배경'); }
+function paint(box, key, label, fade){
+  fade = fade || 0;
+  const ph = box.querySelector('.ph');
+  const olds = [...box.querySelectorAll('img')];
+  if (box.dataset.key === key && olds.some(o => o.classList.contains('on') && !o.dataset.going)) return;   // 같은 그림이면 그대로
+  box.dataset.key = key;
+  const stand = box.classList.contains('st');
+  const drop = () => olds.forEach(o => { o.dataset.going = '1'; if (!fade){ o.remove(); return; }
+    if (stand) o.classList.remove('on'); setTimeout(() => o.remove(), fade + 60); });
+  const tryUrl = (url, alt) => {
+    if (!url){ ph.textContent = (label || key || '') + ' (임시)'; ph.hidden = false; drop(); return; }
+    const im = new Image(); im.alt = ''; im.decoding = 'async'; im.style.setProperty('--fd', fade + 'ms'); setPos(im, key, stand);
+    im.onload = () => { if (box.dataset.key !== key) return; box.appendChild(im); drop();
+      requestAnimationFrame(() => requestAnimationFrame(() => im.classList.add('on')));
+      setTimeout(() => { if (box.dataset.key === key) ph.hidden = true; }, fade + 30); };
+    im.onerror = () => { if (box.dataset.key !== key) return; console.warn('[그림] 불러오기 실패:', key); tryUrl(alt, ''); };   // 깨지면 기본 그림 → 회색 판
+    im.src = url;
+  };
+  const own = IMG[key], base = IMG[String(key).split(':')[0]];
+  tryUrl(own || base || '', own && base && base !== own ? base : '');
+}
+paint($('tcg'), '타이틀', '타이틀 그림', SET.fade.bg);
+function setBg(k, quick){ paint(BG, k, k ? '배경 · ' + k : '배경', quick ? 0 : SET.fade.bg); }
 /* 흉터 — 그림 없이 흰 바탕에 대각선 핏빛 줄 하나. 가운데가 굵고 끝은 가늘며 가장자리는 살짝 거침 */
 function scarSvg(){
   const P0=[205,92], P1=[392,214], P2=[612,368];            // 시작 · 휘는 점 · 끝 (800×600 기준)
@@ -697,24 +763,50 @@ function scarSvg(){
   </svg>`;
 }
 const BUILTIN_CG = { '흉터': scarSvg };
-function setCg(k){
+function setCg(k, quick){
+  G.style.setProperty('--cf', (quick ? 0 : SET.fade.cg) + 'ms');
   G.classList.toggle('cgon', !!k);
+  if (!k) return;                                         // [CG 끝] → 서서히 사라짐 (그림은 다음 CG 때 바뀜)
   CG.querySelectorAll('.scar').forEach(e => e.remove());
-  if (!k) return;
-  CG.dataset.key = k;
   if (!IMG[k] && SET.scar.on && BUILTIN_CG[k]){       // 그림 주소가 없으면 직접 그림
-    const img = CG.querySelector('img'); if (img) img.remove();
+    CG.querySelectorAll('img').forEach(i => i.remove()); CG.dataset.key = k;
     CG.querySelector('.ph').hidden = true;
     const w = document.createElement('div'); w.className = 'scar'; w.style.setProperty('--sd', SET.scar.draw + 'ms'); w.innerHTML = BUILTIN_CG[k](); CG.appendChild(w); return;
   }
-  paint(CG, k, 'CG · ' + k);
+  paint(CG, k, 'CG · ' + k, 0);
 }
-function setStands(list){
-  [stL, stR].forEach(e => { e.hidden = true; e.classList.remove('solo','dim'); e.dataset.who=''; });
-  list.forEach((item, n) => { const el = n ? stR : stL; const who = item.split(':')[0];
-    el.hidden = false; el.dataset.who = who; el.dataset.key = item; paint(el, item, item.replace(':',' · ')); });
-  if (list.length === 1) stL.classList.add('solo');
+/* 서 있는 그림 — 들어올 때 살짝 떠오르며 나타나고, 나갈 때 서서히 사라짐. 표정만 바뀌면 겹쳐서 바뀜 */
+function setStands(list, quick){
+  const f = quick ? 0 : SET.fade.stand; G.style.setProperty('--sf', f + 'ms');
+  list = list.slice(0, 2);
+  [stL, stR].forEach((el, n) => {
+    el.classList.remove('zoom', 'dim'); clearTimeout(el._t);
+    const item = list[n];
+    if (!item){
+      el.dataset.who = '';
+      if (el.classList.contains('show') && f){ el.classList.remove('show');
+        el._t = setTimeout(() => { el.hidden = true; el.querySelectorAll('img').forEach(i => i.remove()); el.dataset.key = ''; }, f + 40); }
+      else { el.classList.remove('show'); el.hidden = true; el.querySelectorAll('img').forEach(i => i.remove()); el.dataset.key = ''; }
+      return;
+    }
+    const who = item.split(':')[0], stay = el.classList.contains('show') && el.dataset.who === who;
+    el.hidden = false; el.dataset.who = who;
+    paint(el, item, item.replace(':',' · '), stay ? f : 0);
+    if (!stay){ el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); }
+  });
+  stL.classList.toggle('solo', list.length === 1);
   G.classList.toggle('stands', list.length > 0);
+}
+/* [확대 토와:호러웃음 2.4] — 등장한 뒤 얼굴 쪽으로 다가옴 / [확대 끝] */
+function zoomStand(arg, quick){
+  const a = String(arg || '').trim().split(/\s+/).filter(Boolean);
+  if (!a.length || a[0] === '끝'){ G.style.setProperty('--zt', (quick ? 0 : SET.zoom.time) + 'ms'); [stL, stR].forEach(e => e.classList.remove('zoom')); return; }
+  const sc = parseFloat(a[1]) || SET.zoom.scale;
+  setStands([a[0]], quick);
+  stL.style.setProperty('--zs', sc); stL.style.setProperty('--zo', SET.zoom.focus);
+  G.style.setProperty('--zt', (quick ? 0 : SET.zoom.time) + 'ms');
+  if (quick){ stL.classList.add('zoom'); return; }
+  clearTimeout(stL._z); stL._z = setTimeout(() => { if (stL.dataset.key === a[0]) stL.classList.add('zoom'); }, SET.zoom.delay);
 }
 
 /* 마름모 와이프 */
@@ -804,11 +896,11 @@ const FX = {
   '버튼잠금': () => ['SAVE','LOAD','AUTO'].forEach(q => QM.querySelector(`[data-q="${q}"]`).disabled = true)
 };
 function resetFx(){
-  G.classList.remove('cold','dark','red','shake','stands','cgon','hidew');
+  G.classList.remove('cold','dark','red','shake','stands','hidew');
   Object.assign(st, { broken:false, eyeOn:false, wait:false, typing:false, flooding:false, slowK:'', plate:'' });
   QM.querySelectorAll('button').forEach(b => b.disabled = false);
   NV.innerHTML=''; FL.innerHTML=''; FL.classList.remove('on'); CH.classList.remove('on'); EY.classList.remove('on','loop');
-  TX.innerHTML=''; NM.textContent=''; NM.className='who off'; setStands([]); setBg('');
+  TX.innerHTML=''; NM.textContent=''; NM.className='who off'; setStands([], true); setBg('', true); setCg('', true);
 }
 function showTitle(){
   clearTimers(); closeOv(true); resetFx(); setMode('title'); bgm(null);
@@ -818,7 +910,7 @@ function showTitle(){
 function startGame(from){
   clearTimers(); closeOv(true); resetFx(); setMode('play');
   for (let k=0;k<from;k++){ const s = SCRIPT[k];          // 중간에서 시작할 때 앞 장면 상태를 맞춤
-    if (s.t==='bg') setBg(s.k); else if (s.t==='stand') setStands(s.list); else if (s.t==='cg') setCg(s.k);
+    if (s.t==='bg') setBg(s.k, true); else if (s.t==='stand') setStands(s.list, true); else if (s.t==='cg') setCg(s.k, true); else if (s.t==='zoom') zoomStand(s.k, true);
     else if (s.t==='fx' && FX[s.k]) FX[s.k](true); else if (s.t==='eye') st.curDate = s.v;
     else if (s.t==='speed') setSpeed(s.k); else if (s.t==='plate') setPlate(s.k); }
   $('cal').textContent = st.curDate;
@@ -829,7 +921,7 @@ function next(){
   if (anyOv() || st.dlgOpen){ st.pending=true; return; }
   clearTimers(); st.wait=false;
   st.i++; const s = SCRIPT[st.i]; if (!s) return;
-  ({ eye:playEye, bg:s => { setBg(s.k); next(); }, stand:s => { setStands(s.list); next(); }, cg:s => { setCg(s.k); next(); },
+  ({ eye:playEye, bg:s => { setBg(s.k); next(); }, stand:s => { setStands(s.list); next(); }, zoom:s => { zoomStand(s.k); next(); }, cg:s => { setCg(s.k); next(); },
      fx:s => { if (FX[s.k]) FX[s.k](); next(); }, speed:s => { setSpeed(s.k); next(); }, plate:s => { setPlate(s.k); next(); }, choice:showChoice, flood, dlg:showDlg, nvl:toNvl, nl:nvlLine, end:endScene, say
   })[s.t](s);
 }
