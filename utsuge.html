@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>澪標 시안2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --w-face:#c0c0c0; --w-hi:#ffffff; --w-lt:#dfdfdf; --w-sh:#808080; --w-dk:#0a0a0a;
+  --desk:#1b1b1d; --ink:#141416; --red:#c8102e; --red-d:#e3324d;
+  --kr:"Nanum Gothic","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --logo:"Zen Maru Gothic","Nanum Gothic",sans-serif;
+  --out:inset -1px -1px var(--w-dk),inset 1px 1px var(--w-hi),inset -2px -2px var(--w-sh),inset 2px 2px var(--w-lt);
+  --in:inset 1px 1px var(--w-dk),inset -1px -1px var(--w-hi),inset 2px 2px var(--w-sh),inset -2px -2px var(--w-lt);
+  --sunk:inset 1px 1px var(--w-sh),inset -1px -1px var(--w-hi),inset 2px 2px var(--w-dk),inset -2px -2px var(--w-lt);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--desk)}
+body{font-family:var(--kr);font-size:12px;color:#000;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit}
+[hidden]{display:none!important}
+
+/* ── 바탕화면 ── */
+.desk{position:relative;overflow:hidden;min-height:360px;background-color:var(--desk);
+  background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1.2px);background-size:3px 3px;user-select:none;-webkit-user-select:none}
+.icons{position:absolute;left:8px;top:10px;display:grid;gap:16px}
+.ic{width:76px;padding:2px;text-align:center;color:#fff;cursor:default;background:none;border:0}
+.ic svg{display:block;width:32px;height:32px;margin:0 auto 4px}
+.ic span{display:inline-block;padding:1px 3px;line-height:1.3}
+.ic.sel span{background:#000;outline:1px dotted #fff}
+.ic.sel svg{filter:brightness(.7)}
+.desk.narrow .icons{display:none}
+
+/* ── 작업 표시줄 ── */
+.tb{position:absolute;left:0;right:0;bottom:0;height:30px;z-index:900;display:flex;align-items:center;gap:4px;padding:3px 2px 1px;
+  background:var(--w-face);box-shadow:inset 0 1px var(--w-lt),inset 0 2px var(--w-hi)}
+.btn98{background:var(--w-face);border:0;border-radius:0;box-shadow:var(--out);padding:3px 10px;min-height:23px;cursor:default}
+.btn98:active:not(:disabled),.btn98.on{box-shadow:var(--in)}
+.btn98:focus-visible{outline:1px dotted #000;outline-offset:-5px}
+.btn98:disabled{color:var(--w-sh);text-shadow:1px 1px var(--w-hi)}
+.btn98.on{background-color:#d6d6d6;background-image:linear-gradient(45deg,#fff 25%,transparent 25%,transparent 75%,#fff 75%),linear-gradient(45deg,#fff 25%,transparent 25%,transparent 75%,#fff 75%);
+  background-size:2px 2px;background-position:0 0,1px 1px}
+.start{display:flex;align-items:center;gap:5px;font-weight:800;padding:2px 8px 2px 4px;height:24px}
+.slogo{display:inline-grid;place-items:center;width:16px;height:16px;background:#000;color:#fff;font-size:12px;line-height:1}
+.sep{width:2px;height:22px;box-shadow:inset 1px 0 var(--w-sh),inset -1px 0 var(--w-hi);margin:0 2px}
+.task{display:flex;align-items:center;gap:5px;width:190px;max-width:38vw;height:24px;padding:2px 6px;text-align:left;overflow:hidden}
+.task span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.task.on{font-weight:800}
+.task svg,.sm svg{width:16px;height:16px;flex:none}
+.tray{margin-left:auto;display:flex;align-items:center;gap:8px;height:24px;padding:0 10px 0 6px;box-shadow:inset 1px 1px var(--w-sh),inset -1px -1px var(--w-hi)}
+.spk{display:grid;place-items:center;width:18px;height:18px;padding:0;background:none;border:0;cursor:default}
+.spk svg{width:14px;height:14px}
+.spk .mx{display:none}
+.spk.muted .mx{display:inline}
+.spk.muted .wv{display:none}
+
+/* 시작 메뉴 */
+.sm{position:absolute;left:2px;bottom:28px;z-index:950;display:flex;background:var(--w-face);box-shadow:var(--out);padding:3px}
+.sm .band{width:24px;background:linear-gradient(0deg,#000,#7a7a7a);color:#d6d6d6;writing-mode:vertical-rl;transform:rotate(180deg);
+  font-weight:800;font-size:15px;letter-spacing:.12em;padding:8px 2px;text-align:right}
+.sm .band b{color:#fff}
+.sm ul{list-style:none;margin:0;padding:0;min-width:200px}
+.sm li button{display:flex;align-items:center;gap:10px;width:100%;padding:7px 10px 7px 8px;background:none;border:0;text-align:left;cursor:default}
+.sm li button:hover,.sm li button:focus-visible{background:#000;color:#fff;outline:0}
+.sm li button:hover svg,.sm li button:focus-visible svg{filter:invert(1)}
+.sm hr{border:0;height:2px;margin:3px 2px;box-shadow:inset 0 1px var(--w-sh),inset 0 -1px var(--w-hi)}
+
+/* ── 창 ── */
+.win{position:absolute;background:var(--w-face);padding:3px;box-shadow:var(--out);z-index:10}
+.tt{display:flex;align-items:center;gap:4px;height:20px;padding:0 2px 0 4px;background:linear-gradient(90deg,#000,#8c8c8c);color:#fff;font-weight:800;touch-action:none;cursor:default}
+.win.inact .tt{background:linear-gradient(90deg,#7b7b7b,#b8b8b8);color:#dedede}
+.tt .ti{width:16px;height:16px;flex:none}
+.tt .nm{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tbtn{width:16px;height:14px;padding:0;display:grid;place-items:center;background:var(--w-face);border:0;box-shadow:var(--out);cursor:default;flex:none}
+.tbtn:active:not(:disabled){box-shadow:var(--in)}
+.tbtn svg{fill:#000}
+.tbtn:disabled svg{fill:var(--w-sh)}
+.tbtn.x{margin-left:2px}
+.client{position:relative;margin-top:2px;padding:2px;box-shadow:var(--sunk);background:#000;container-type:inline-size}
+.win.hang .client::after{content:"";position:absolute;inset:2px;background:rgba(255,255,255,.42);z-index:60;pointer-events:none}
+.nbody{margin-top:2px;height:250px;overflow:auto;padding:6px 8px;background:#fff;box-shadow:var(--sunk);font-size:13px;line-height:1.7;white-space:pre-wrap;user-select:text;-webkit-user-select:text}
+
+/* 확인 창 */
+.blk{position:absolute;inset:0;z-index:990}
+.dlg{z-index:1000;width:310px;max-width:calc(100% - 16px)}
+.dbody{display:flex;align-items:center;gap:14px;padding:18px 14px 12px}
+.dbody p{margin:0;font-size:13px;line-height:1.55}
+.dic{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#fff;border:2px solid #000;font-style:normal;font-weight:800;font-size:18px}
+.drow{display:flex;justify-content:center;gap:8px;padding:2px 0 10px}
+.drow .btn98{min-width:76px}
+.off{position:absolute;inset:0;z-index:2000;background:#000;color:#cfcfcf;display:grid;place-items:center;text-align:center;font-size:16px;line-height:2;cursor:default}
+.off small{display:block;font-size:12px;color:#777}
+
+/* ══════ 게임 화면 (4:3 — 그 시절 800×600 비율) ══════ */
+.game{position:relative;aspect-ratio:4/3;overflow:hidden;background:#fff;color:var(--ink);cursor:default;outline:0;
+  font-family:var(--kr);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.layer{position:absolute;inset:0}
+/* 임시 그림: 회색 판 + 이름표만 */
+.ph{position:absolute;inset:0;display:grid;place-items:center;background:#e4e5e8;color:#9a9da3;font-size:12px;letter-spacing:.1em}
+.bg{transition:filter 1.2s}
+.bg img,.tcg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.st{position:absolute;bottom:0;width:32%;height:84%;opacity:0;transition:opacity .5s,filter .3s}
+#stL{left:12%} #stR{right:12%}
+.st .ph{background:rgba(196,199,204,.55);border-radius:2px;align-items:start;padding-top:28%}
+.st img{position:absolute;bottom:0;left:50%;height:100%;width:auto;max-width:none;transform:translateX(-50%)}
+.game.stands[data-mode=play] .st{opacity:1}
+.st.dim{filter:brightness(.82)}
+.game.cold .bg{filter:brightness(.84) contrast(1.06) saturate(.6)}
+.game.cold .st{filter:brightness(.76) saturate(.6)}
+
+/* 날짜 표시 (왼쪽 위) */
+.cal{position:absolute;left:2.6%;top:3%;z-index:2;display:none;padding:.35em .9em;background:rgba(255,255,255,.8);border:1px solid #2a2a2d;
+  font-weight:700;font-size:clamp(10px,1.5cqw,14px);letter-spacing:.1em;color:#1b1b1d}
+.game[data-mode=play] .cal{display:block}
+.game.dark .cal,.game.red .cal{color:var(--red);border-color:var(--red)}
+
+/* 대사창 — 화면 아래를 가로로 덮는 흰 그라데이션 띠 */
+.msg{position:absolute;left:0;right:0;bottom:0;height:33%;z-index:3;display:none;padding:3.6cqw 9% 6cqw;
+  background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.74) 24%,rgba(255,255,255,.9) 62%,rgba(255,255,255,.94))}
+.game[data-mode=play] .msg{display:block}
+.who{display:flex;align-items:center;gap:.7em;height:1.4em;margin-bottom:.3em;font-weight:800;font-size:clamp(11px,1.75cqw,16px);letter-spacing:.14em;color:#1b1b1d;
+  text-shadow:0 0 3px #fff,0 0 6px #fff}
+.who::after{content:"";width:3.2em;height:1px;background:currentColor;opacity:.55}
+.who.off{visibility:hidden}
+.who.blank::after{width:6em}   /* 이름판 비움: 글자 없이 선만 남음 */
+.txt{font-weight:700;font-size:clamp(14px,2.45cqw,23px);line-height:1.78;letter-spacing:.02em;color:var(--ink);
+  text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 7px rgba(255,255,255,.95);word-break:keep-all}
+.txt .r{color:var(--red)}
+.wt{display:inline-block;width:0;height:0;margin-left:.35em;vertical-align:.06em;border-left:.32em solid transparent;border-right:.32em solid transparent;border-top:.46em solid var(--ink);
+  animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.15}}
+.game.hidew .msg,.game.hidew .qm,.game.hidew .cal{visibility:hidden}
+
+/* 이벤트 그림(CG) — 화면 전체 */
+.cg{position:absolute;inset:0;z-index:1;display:none}
+.cg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.game.cgon .cg{display:block}
+.game.cgon .st{opacity:0!important}
+.st.solo{left:34%!important;right:auto!important}
+
+/* ── 고장 효과 ── */
+/* 어둠: 대사창 띠가 검게 바뀜 */
+.game.dark .msg{background:linear-gradient(rgba(6,6,8,0),rgba(6,6,8,.8) 24%,rgba(6,6,8,.93) 62%,rgba(6,6,8,.97))}
+.game.dark .txt{color:#f2f2f4;text-shadow:0 0 3px #000,0 0 7px #000}
+.game.dark .who{color:#f2f2f4;text-shadow:0 0 4px #000}
+.game.dark .who::after{background:var(--red);opacity:1;height:2px;width:5em}
+.game.dark .wt{border-top-color:#f2f2f4}
+.game.dark .txt .r{color:var(--red-d)}
+.game.dark .qm button{background:rgba(18,18,20,.55);color:#e7e7ea;border-color:#66666b;box-shadow:none}
+/* 붉음: 장면 전체가 핏빛으로 물들고 서 있는 그림은 검은 그림자가 됨 */
+.tint{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity 3.2s ease;mix-blend-mode:multiply;
+  background:radial-gradient(ellipse 70% 62% at 50% 42%,rgba(255,255,255,0),rgba(40,0,6,.62)),#a3001b}
+.game.red .tint{opacity:.9}
+.game.red .st{filter:brightness(0)!important;transition:filter 2.6s ease,opacity .5s}
+.game.red .st .ph{color:transparent}
+/* 반복: 같은 말이 화면을 가득 메움 */
+.flood{position:absolute;inset:0;z-index:8;display:none;padding:3cqw 4cqw;overflow:hidden;background:rgba(5,5,7,.5);
+  font-weight:800;font-size:clamp(13px,2.3cqw,21px);line-height:1.55;color:#f4f4f6;word-break:keep-all}
+.flood.on{display:block}
+.flood span{display:inline-block;margin-right:.55em;white-space:nowrap}
+.flood span.r{color:var(--red-d)}
+
+/* 시스템 버튼 — 둥근 알약 줄 */
+.qm{position:absolute;left:0;right:0;bottom:1.6%;z-index:4;display:none;justify-content:center;gap:.7cqw}
+.game[data-mode=play] .qm{display:flex}
+.qm button{display:inline-flex;align-items:center;gap:.4em;height:max(20px,2.9cqw);padding:0 .95em;border-radius:999px;border:1px solid #2b2b2e;
+  background:rgba(255,255,255,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 1px 2px rgba(0,0,0,.18);
+  font-family:var(--kr);font-weight:800;font-size:clamp(9px,1.2cqw,12px);letter-spacing:.02em;color:#1f1f22;cursor:pointer;white-space:nowrap}
+.qm button:hover:not(:disabled){background:#fff}
+.qm button.on{background:#1b1b1d;color:#fff;border-color:#1b1b1d}
+.qm button:disabled{opacity:.3;cursor:default}
+
+
+/* 선택지 */
+.choice{position:absolute;inset:0;z-index:5;display:none;flex-direction:column;justify-content:center;align-items:center;gap:2.2cqw;padding-bottom:8%;background:rgba(255,255,255,.28)}
+.choice.on{display:flex}
+.choice button{position:relative;width:60%;padding:1.3cqw 0;font-family:var(--kr);font-weight:700;font-size:clamp(13px,2.1cqw,19px);letter-spacing:.06em;
+  background:linear-gradient(90deg,rgba(255,255,255,.35),rgba(255,255,255,.95) 18%,rgba(255,255,255,.95) 82%,rgba(255,255,255,.35));border:0;border-top:1px solid #2a2a2d;border-bottom:1px solid #2a2a2d;color:#141416;cursor:pointer}
+.choice button:hover,.choice button:focus-visible{background:#1b1b1d;color:#fff;outline:0}
+.choice button.ow::after{content:"";display:inline-block;width:.08em;height:1.05em;margin-left:.12em;vertical-align:-.15em;background:var(--red)}  /* 덮어쓰는 중 커서 */
+.game.dark .choice{background:rgba(6,6,8,.42)}
+.game.dark .choice button{background:linear-gradient(90deg,rgba(14,14,16,.3),rgba(14,14,16,.94) 18%,rgba(14,14,16,.94) 82%,rgba(14,14,16,.3));border-color:#5a5a60;color:#ececef}
+.game.dark .choice button:hover,.game.dark .choice button:focus-visible{background:#ececef;color:#0e0e10}
+
+/* 아이캐치 (장면 사이) */
+.eye{position:absolute;inset:0;z-index:15;display:none;place-items:center;background:#fff;text-align:center}
+.eye.on{display:grid}
+.eye .lg{font-family:var(--logo);font-weight:700;font-size:clamp(22px,5cqw,48px);letter-spacing:.08em;line-height:1}
+.eye .sb{margin-top:.8em;font-family:var(--logo);font-weight:500;font-size:clamp(10px,1.35cqw,13px);letter-spacing:.24em;color:#55575c}
+.eye .dt{position:relative;display:inline-block;margin-top:2.4em;font-weight:700;font-size:clamp(12px,1.8cqw,17px);letter-spacing:.2em}
+.eye.loop .dt::after{content:attr(data-v);position:absolute;inset:0;color:var(--red);opacity:.38;transform:translate(3px,2px)}
+
+/* 마름모 와이프 전환 (그 시절 「룰 화상」 전환) */
+.wipe{position:absolute;inset:0;z-index:30;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(9,1fr);pointer-events:none;overflow:hidden}
+.wipe i{position:relative}
+.wipe i::before{content:"";position:absolute;left:50%;top:50%;width:210%;height:210%;background:var(--wc,#fff);
+  transform:translate(-50%,-50%) rotate(45deg) scale(0);transition:transform .3s ease-in-out;transition-delay:var(--d)}
+.wipe.cover i::before{transform:translate(-50%,-50%) rotate(45deg) scale(1)}
+
+/* 타이틀 */
+.title{position:absolute;inset:0;z-index:6;display:none;background:#fff}
+.game[data-mode=title] .title{display:block}
+.tcg{position:absolute;right:0;top:0;bottom:0;width:62%}
+.tcg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#fff,rgba(255,255,255,0) 40%);pointer-events:none}
+.staff{position:absolute;left:0;right:38%;top:21%;height:calc(6cqw + 1px);background:repeating-linear-gradient(to bottom,#111 0 1px,transparent 1px 1.5cqw);opacity:.13}
+.logo{position:absolute;left:7%;top:17%}
+.logo h1{margin:0;font-family:var(--logo);font-weight:700;font-size:clamp(34px,10cqw,96px);letter-spacing:.06em;line-height:1}
+.logo p{margin:.9em 0 0 .2em;font-family:var(--logo);font-weight:500;font-size:clamp(10px,1.7cqw,16px);letter-spacing:.16em;color:#3c3e43}
+.tmenu{position:absolute;left:8%;bottom:15%;display:grid;gap:1.1cqw;justify-items:start}
+.tmenu button{position:relative;background:none;border:0;padding:.18em 0 .18em 1.4em;font-family:var(--logo);font-weight:500;font-size:clamp(13px,2.1cqw,19px);letter-spacing:.24em;color:#111;cursor:pointer;text-align:left}
+.tmenu button::before{content:"♪";position:absolute;left:0;opacity:0;transition:opacity .15s}
+.tmenu button:hover:not(:disabled)::before,.tmenu button:focus-visible::before{opacity:1}
+.tmenu button:focus-visible{outline:0}
+.tmenu button:disabled{color:#c2c4c9;cursor:default}
+.ver{position:absolute;left:8%;bottom:4.5%;font-size:clamp(10px,1.2cqw,11px);letter-spacing:.1em;color:#8a8d93}
+
+/* 반전 뒤: 화면 가득 글 */
+.nvl{position:absolute;inset:0;z-index:7;display:none;padding:8cqw 10cqw;background:rgba(7,7,9,.9);color:#f1f1f3;
+  font-weight:700;font-size:clamp(13px,2.3cqw,21px);line-height:2.15;letter-spacing:.04em;word-break:keep-all}
+.game[data-mode=nvl] .nvl,.game[data-mode=end] .nvl{display:block}
+.game[data-mode=nvl] .bg,.game[data-mode=end] .bg{filter:brightness(.35) saturate(.4)}
+.nvl p{margin:0;opacity:0;transition:opacity .7s}
+.nvl p.in{opacity:1}
+.nvl .r{color:var(--red-d)}
+.fin{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(18px,3.8cqw,36px);letter-spacing:.32em;opacity:0;transition:opacity 1.8s}
+.fin.in{opacity:1}
+
+/* 기록·저장·설정 */
+.ov{position:absolute;inset:0;z-index:9;display:none;padding:4cqw 6cqw;background:rgba(255,255,255,.97);overflow:auto;font-size:clamp(13px,1.9cqw,17px)}
+.ov.on{display:block}
+.ovh{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;border-bottom:1px solid #111;padding-bottom:1.2cqw;margin-bottom:2.4cqw}
+.ovh h2{margin:0;font-family:var(--logo);font-weight:700;font-size:clamp(16px,3cqw,28px);letter-spacing:.2em;line-height:1}
+.ovh h2 small{margin-left:.8em;font-family:var(--kr);font-size:.45em;letter-spacing:.1em;color:#55575c}
+.back{height:max(22px,3cqw);padding:0 1.2em;border-radius:999px;border:1px solid #2b2b2e;background:#fff;font-family:var(--kr);font-weight:800;font-size:clamp(11px,1.3cqw,13px);cursor:pointer}
+.back:hover,.back:focus-visible{background:#1b1b1d;color:#fff;outline:0}
+.cfg{display:grid;gap:2.4cqw}
+.cfg .row{display:flex;align-items:center;gap:1.4cqw;flex-wrap:wrap}
+.cfg .row > span{width:8em;font-weight:700}
+.cfg .opt{height:max(22px,3cqw);padding:0 1.1em;border-radius:999px;border:1px solid #2b2b2e;background:#fff;font-family:var(--kr);font-weight:700;cursor:pointer}
+.cfg .opt.on{background:#1b1b1d;color:#fff}
+
+@keyframes sh{0%,100%{transform:none}25%{transform:translate(2px,0)}50%{transform:translate(-2px,1px)}75%{transform:translate(1px,-1px)}}
+.game.shake{animation:sh .36s 1}
+
+/* ── 폰(좁은 창) ── */
+@container (max-width:460px){
+  .game{aspect-ratio:3/4}
+  .st{width:46%;height:62%} #stL{left:2%} #stR{right:2%}
+  .msg{height:34%;padding:6cqw 6% 13cqw}
+  .who{font-size:12px}
+  .txt{font-size:clamp(14px,4.1cqw,17px)}
+  .qm{gap:1.6cqw;bottom:2.4%}
+  .qm button{font-size:10px;padding:0 .7em;height:22px}
+  .cal{font-size:11px}
+  .tcg{width:100%}
+  .tcg::after{background:linear-gradient(0deg,#fff 22%,rgba(255,255,255,.2) 62%)}
+  .staff{right:10%;top:15%;height:calc(12cqw + 1px);background-image:repeating-linear-gradient(to bottom,#111 0 1px,transparent 1px 3cqw)}
+  .logo{top:12%}
+  .logo h1{font-size:clamp(40px,19cqw,80px)}
+  .logo p{font-size:clamp(10px,3.1cqw,14px);letter-spacing:.08em}
+  .tmenu{bottom:12%;gap:2.6cqw}
+  .tmenu button{font-size:clamp(14px,4.6cqw,18px)}
+  .choice button{width:84%;padding:3cqw 0;font-size:clamp(13px,4.2cqw,17px)}
+  .eye .lg{font-size:clamp(28px,11cqw,44px)}
+  .eye .sb{font-size:11px;letter-spacing:.08em}
+  .eye .dt{font-size:14px}
+  .nvl{padding:12cqw 8cqw;font-size:clamp(13px,4.2cqw,17px)}
+  .fin{font-size:clamp(18px,6.4cqw,26px)}
+  .ov{padding:6cqw 5cqw;font-size:clamp(13px,3.9cqw,16px)}
+  .ovh h2{font-size:clamp(16px,5.4cqw,22px)}
+  .back{font-size:12px;height:24px}
+}
+
+/* ── 시안 확인용 줄(실제 홈에는 넣지 않음) ── */
+.demo{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px;background:#2a2a2d;color:#d9d9dc;font-size:13px}
+.demo b{margin-right:6px}
+.demo button{background:#3a3a3e;border:1px solid #55555a;color:#fff;padding:5px 10px;border-radius:0;cursor:pointer}
+.demo button:hover{background:#4a4a4f}
+.demo .note{flex-basis:100%;color:#a9a9ae;font-size:12px;min-height:1.2em}
+</style>
+</head>
+<body>
+
+<div class="desk" id="desk">
+  <div class="icons">
+    <button class="ic" type="button" data-ic="game" aria-label="澪標 열기">
+      <svg viewBox="0 0 32 32"><rect x="3" y="3" width="26" height="26" fill="#fff" stroke="#000" stroke-width="2"/><rect x="3" y="3" width="26" height="6"/><text x="16" y="25" font-size="14" text-anchor="middle" font-family="sans-serif" font-weight="700">澪</text></svg>
+      <span>澪標</span>
+    </button>
+    <button class="ic" type="button" data-ic="note" aria-label="읽어주세요.txt 열기">
+      <svg viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M20 3v6h6" fill="#c0c0c0" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg>
+      <span>읽어주세요.txt</span>
+    </button>
+    <button class="ic" type="button" data-ic="bin" aria-label="휴지통">
+      <svg viewBox="0 0 32 32"><path d="M8 9h16l-2 20H10z" fill="#dcdcdc" stroke="#000" stroke-width="2"/><path d="M6 7h20M13 4h6" stroke="#000" stroke-width="2"/><path d="M13 13v12M16 13v12M19 13v12" stroke="#808080" stroke-width="1.5"/></svg>
+      <span>휴지통</span>
+    </button>
+  </div>
+
+  <section class="win" id="wGame" data-state="open" aria-label="澪標">
+    <div class="tt">
+      <svg class="ti" viewBox="0 0 32 32"><rect x="3" y="3" width="26" height="26" fill="#fff" stroke="#000" stroke-width="3"/><text x="16" y="24" font-size="16" text-anchor="middle" font-family="sans-serif" font-weight="700">澪</text></svg>
+      <span class="nm" id="gTitle"></span>
+      <button class="tbtn" type="button" data-act="min" aria-label="최소화"><svg width="8" height="7" viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button>
+      <button class="tbtn" type="button" data-act="max" aria-label="최대화"><svg width="9" height="8" viewBox="0 0 9 8"><path fill-rule="evenodd" d="M0 0h9v8H0zM1 2v5h7V2z"/></svg></button>
+      <button class="tbtn x" type="button" data-act="close" aria-label="닫기"><svg width="8" height="7" viewBox="0 0 8 7"><path d="M0 0h2l2 2 2-2h2L5 3.5 8 7H6L4 5 2 7H0l3-3.5z"/></svg></button>
+    </div>
+    <div class="client">
+      <div class="game" id="game" data-mode="title" tabindex="0">
+
+        <div class="layer bg" id="bg"><div class="ph"></div></div>
+        <div class="st" id="stL"><div class="ph"></div></div>
+        <div class="st" id="stR"><div class="ph"></div></div>
+        <div class="cg" id="cg"><div class="ph">이벤트 그림 (임시)</div></div>
+        <div class="tint"></div>
+        <div class="cal" id="cal"></div>
+
+        <div class="msg" id="msg"><div class="who off" id="nm"></div><div class="txt" id="txt"></div></div>
+        <nav class="qm" id="qm" aria-label="시스템 메뉴">
+          <button type="button" data-q="SAVE">SAVE</button><button type="button" data-q="LOAD">LOAD</button><button type="button" data-q="AUTO">AUTO</button><button type="button" data-q="CONFIG">CONFIG</button><button type="button" data-q="HIDE">Hide W.</button>
+        </nav>
+
+        <div class="choice" id="choice"></div>
+        <div class="flood" id="flood"></div>
+        <div class="nvl" id="nvl"></div>
+        <div class="eye" id="eye"><div><div class="lg">澪標</div><div class="sb" id="eyeSub"></div><div><span class="dt" id="eyeDate" data-v=""></span></div></div></div>
+
+        <div class="title" id="title">
+          <div class="tcg" id="tcg"><div class="ph">타이틀 그림 (임시)</div></div>
+          <div class="staff"></div>
+          <div class="logo"><h1>澪標</h1><p id="logoSub"></p></div>
+          <div class="tmenu">
+            <button type="button" id="tStart">START</button>
+            <button type="button" id="tCont">LOAD</button>
+            <button type="button" id="tCfg">CONFIG</button>
+            <button type="button" id="tEnd">EXIT</button>
+          </div>
+          <span class="ver" id="ver">ver 1.02</span>
+        </div>
+
+        <div class="ov" id="ov-cfg"><div class="ovh"><h2>CONFIG<small>환경 설정</small></h2><button class="back" type="button" data-back>돌아가기</button></div>
+          <div class="cfg">
+            <div class="row" data-cfg="speed"><span>글자 속도</span><button class="opt" type="button" data-v="60">느림</button><button class="opt" type="button" data-v="34">보통</button><button class="opt" type="button" data-v="14">빠름</button></div>
+            <div class="row" data-cfg="sound"><span>소리</span><button class="opt" type="button" data-v="1">켬</button><button class="opt" type="button" data-v="0">끔</button></div>
+          </div>
+        </div>
+
+        <div class="wipe" id="wipe"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="win" id="wNote" data-state="closed" hidden aria-label="읽어주세요.txt">
+    <div class="tt">
+      <svg class="ti" viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg>
+      <span class="nm">읽어주세요.txt - 메모장</span>
+      <button class="tbtn" type="button" data-act="min" aria-label="최소화"><svg width="8" height="7" viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button>
+      <button class="tbtn" type="button" data-act="max" disabled aria-label="최대화"><svg width="9" height="8" viewBox="0 0 9 8"><path fill-rule="evenodd" d="M0 0h9v8H0zM1 2v5h7V2z"/></svg></button>
+      <button class="tbtn x" type="button" data-act="close" aria-label="닫기"><svg width="8" height="7" viewBox="0 0 8 7"><path d="M0 0h2l2 2 2-2h2L5 3.5 8 7H6L4 5 2 7H0l3-3.5z"/></svg></button>
+    </div>
+    <div class="nbody" id="nbody"></div>
+  </section>
+
+  <div class="sm" id="sm" hidden>
+    <div class="band"><b>enharmonic</b> 98</div>
+    <ul>
+      <li><button type="button" data-sm="game"><svg viewBox="0 0 32 32"><rect x="3" y="3" width="26" height="26" fill="#fff" stroke="#000" stroke-width="2"/><rect x="3" y="3" width="26" height="6"/><text x="16" y="25" font-size="14" text-anchor="middle" font-family="sans-serif" font-weight="700">澪</text></svg>澪標</button></li>
+      <li><button type="button" data-sm="note"><svg viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg>읽어주세요.txt</button></li>
+      <li><hr></li>
+      <li><button type="button" data-sm="reset"><svg viewBox="0 0 32 32"><path d="M24 10a10 10 0 1 0 2 9" fill="none" stroke="#000" stroke-width="3"/><path d="M26 3v9h-9z"/></svg>다시 시작</button></li>
+      <li><button type="button" data-sm="off"><svg viewBox="0 0 32 32"><path d="M10 9a10 10 0 1 0 12 0" fill="none" stroke="#000" stroke-width="3"/><path d="M16 3v12" stroke="#000" stroke-width="3"/></svg>시스템 종료</button></li>
+    </ul>
+  </div>
+
+  <div class="tb">
+    <button class="btn98 start" id="start" type="button"><b class="slogo">♯</b>시작</button>
+    <i class="sep"></i>
+    <button class="btn98 task" id="tkGame" type="button"><svg viewBox="0 0 32 32"><rect x="3" y="3" width="26" height="26" fill="#fff" stroke="#000" stroke-width="2"/><rect x="3" y="3" width="26" height="6"/><text x="16" y="25" font-size="14" text-anchor="middle" font-family="sans-serif" font-weight="700">澪</text></svg><span id="tkGameT"></span></button>
+    <button class="btn98 task" id="tkNote" type="button" hidden><svg viewBox="0 0 32 32"><path d="M7 3h13l6 6v20H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M11 15h11M11 19h11M11 23h8" stroke="#808080" stroke-width="2"/></svg><span>읽어주세요.txt - 메모장</span></button>
+    <div class="tray">
+      <button class="spk" id="spk" type="button" aria-label="소리 켜기/끄기"><svg viewBox="0 0 16 16"><path d="M2 6h3l4-3v10l-4-3H2z"/><path class="wv" d="M11 5.5c1 .8 1 4.2 0 5M12.8 4c2 1.6 2 6.4 0 8" fill="none" stroke="#000" stroke-width="1.2"/><path class="mx" d="M11 6l4 4M15 6l-4 4" stroke="#000" stroke-width="1.4"/></svg></button>
+      <span id="clock">0:00</span>
+    </div>
+  </div>
+
+  <div class="off" id="off" hidden><div>이제 전원을 꺼도 됩니다.<small>누르면 다시 켜집니다</small></div></div>
+</div>
+
+<div class="demo" id="demo">
+  <b>시안 확인용</b>
+  <button type="button" data-j="title">타이틀</button>
+  <button type="button" data-j="0">평범한 장면</button>
+  <button type="button" data-j="loop">고장 시작</button>
+  <button type="button" data-j="dlg">확인창</button>
+  <button type="button" data-j="nvl">반전 뒤 화면</button>
+  <button type="button" data-j="end">마지막</button>
+  <button type="button" data-j="reset">전부 처음으로</button>
+  <span class="note" id="demoNote">게임 화면을 누르거나 Enter로 진행합니다.</span>
+</div>
+
+<script>
+/* 澪標 utsuge.html — 수정본1 (2026-11-20) · GitHub 저장소 enharmonic 맨 위에 이 이름 그대로 올립니다 */
+/* ═══════════════════════════════════════════════
+   1. 기본 설정 — 제목·이름·소리
+   주의: 따옴표 '…' 와 쉼표 , 를 지우면 화면이 멈춥니다.
+   ═══════════════════════════════════════════════ */
+const SET = {
+  gameTitle: '澪標',
+  gameSub:   '〜 壊れた共犯の夜が明けるまで 〜',
+  windowTitle: '澪標 〜 壊れた共犯の夜が明けるまで 〜 한글패치 1.0',
+  names: { 미오:'시라이시 미오', 토와:'시라이시 토와' },  // 대본에 쓰는 짧은 이름 : 화면에 나오는 이름
+  sound: {
+    on: true,      // 처음에 소리 켜 둘지
+    se: true,      // 효과음 (타이틀 버튼 = 불협화음 울림, 게임 안 버튼 = 딸깍)
+    seVol: 0.6,    // 효과음 크기 0 ~ 1
+    bgm1: '',      // 반전 전 BGM 파일 (예: 'bgm/before.mp3'). 비우면 BGM 없음
+    bgm2: '',      // 반전 뒤 BGM. 비우면 bgm1이 계속 흐름
+    bgmVol: 0.7
+  },
+  speed: 34,          // 글자 나오는 빠르기 (작을수록 빠름)
+  slow: { 느림:3, 아주느림:6 },  // [속도 느림] [속도 아주느림] 때 몇 배 느려질지
+  slowPause: 380,     // 느린 속도일 때 「… , . ?」 뒤에서 한 번 더 쉬는 시간(ms). 0이면 안 쉼
+  slowSkip: true,     // 느린 대사도 클릭하면 바로 다 나오게. false면 끝까지 기다려야 함
+  overwrite: { wait:1100, erase:55, type:85 },  // [선택 … 덮어쓰기] 시작까지 기다림·지우는 속도·쓰는 속도(ms)
+  maxW: 860,          // 넓은 화면에서 게임 창 최대 폭(px)
+  embedSignal: true,  // 러브로그용 신호 (마지막 장면에서 카테고리·위젯 열기). 컴퓨터에서 파일로 열어 볼 때는 false
+  demoBar: false      // 아래 「시안 확인용」 줄 (장면 건너뛰기). 고치면서 확인할 때만 true
+};
+
+/* ═══════════════════════════════════════════════
+   2. 그림 목록 — 이름 : 주소
+   대본에서 [배경 거실] [등장 토와] [CG 흉터] 처럼 이 이름으로 부릅니다.
+   표정을 나누려면 '토와:웃음' 처럼 이름 뒤에 :표정 을 붙여 추가하세요.
+   주소를 비워 두면 회색 임시 판이 나옵니다.
+   ═══════════════════════════════════════════════ */
+const IMG = {
+  '타이틀':     '',   // 타이틀 화면 그림 (4:3 가로)
+  '현관':       '',   // 배경: 오피스텔 현관
+  '거실':       '',   // 배경: 거실
+  '피아노':     '',   // 배경: 방 구석 전자피아노
+  '토와':       '',   // 서 있는 그림: 기본 (배경 투명 PNG)
+  '토와:웃음':  '',   // 서 있는 그림: 웃는 얼굴
+  '토와:무표정': '',  // 서 있는 그림: 표정 없음
+  '흉터':       '',   // 이벤트 그림(CG): 머플러가 풀린 목
+};
+
+/* ═══════════════════════════════════════════════
+   3. 대본 — 한 줄 = 클릭 한 번
+   ─ 그냥 쓰면 지문(나레이션)
+   ─ 이름: 「대사」          → 대사 (이름은 위 names의 짧은 이름)
+   ─ [[글자]]                → 그 글자만 진홍색
+   ─ [날짜 6월 14일 (토)]     → 장면 전환 + 날짜 화면 ( 끝에 「반복」을 붙이면 고장 버전 )
+   ─ [배경 이름]  [등장 미오 토와]  [등장 토와]  [퇴장]
+   ─ [CG 이름]   [CG 끝]
+   ─ [선택 고르기1 | 고르기2]    → 어느 쪽을 골라도 다음 줄로
+   ─ [선택 고르기1 | 고르기2 덮어쓰기]
+                     → 잠시 뒤 두 번째 칸 글자가 지워지고 첫 번째와 똑같이 다시 써짐
+   ─ [속도 느림]  [속도 아주느림]  [속도 보통]
+                     → 이 아래 대사부터 글자 나오는 빠르기가 바뀜 (보통으로 되돌릴 때까지)
+   ─ [이름판 짧게]  → 「시라이시 토와」 대신 「토와」만
+     [이름판 비움]  → 이름 없이 선만 남음 (지문과 달리 이름 자리는 그대로)
+     [이름판 보통]  → 원래대로
+   ─ [효과 차가움]   색이 빠짐
+     [효과 어둠]     대사창이 검게 바뀜
+     [효과 붉음]     장면이 핏빛으로, 서 있는 그림은 검은 그림자로
+     [효과 흔들림]   화면이 한 번 흔들림
+     [효과 버튼잠금] 대사창 아래 버튼이 꺼짐
+   ─ [반복 문장]     같은 말이 화면을 가득 메움
+   ─ [확인창 문장]   「아니오」가 눌리지 않는 확인창
+   ─ [암전]          검은 화면 + 화면 가득 글로 바뀜 (이 아래 줄은 한 줄씩 쌓임)
+   ─ [끝 문장]       마지막 장면 (러브로그에서는 이때 카테고리·위젯이 열림)
+   ═══════════════════════════════════════════════ */
+const STORY = `
+[날짜 11월 3일 (화)]
+[배경 현관]
+도어록이 짧게 울리고, 문이 열린다.
+신발을 벗으려다, 손이 멈췄다.
+현관에 가지런히 놓인 낯익은 구두 한 켤레.
+그리고 집 안쪽에서 새어 나오는 불빛.
+[배경 거실]
+[등장 토와:웃음]
+토와: 「어서 와, 오빠.」
+미오: 「……토와? 언제 왔어.」
+토와: 「음, 점심 지나고? 오빠 늦을 것 같아서 조금 정리해 뒀어.」
+조금, 이라는 말과는 어울리지 않는 방이었다.
+바닥에 쌓여 있던 악보는 번호 순서대로 꽂혀 있고,
+싱크대에는 컵 하나 남아 있지 않았다.
+소파에 던져 두었던 셔츠는 전부 다려진 채, 옷걸이에 나란히 걸려 있었다.
+미오: 「……이걸 다 혼자 했어?」
+토와: 「응. 오빠 집, 생각보다 금방이던데.」
+토와: 「어디에 뭐가 있는지, 다 알 것 같았어.」
+그렇게 말하며 웃는 얼굴은, 기억 속 그대로였다.
+미오: 「고마워. 덕분에 살았다.」
+토와: 「헤헤. 칭찬해 주면 또 올게.」
+[등장 토와]
+토와는 목에 두른 얇은 머플러를 살짝 고쳐 맸다.
+실내에서도 그녀는 그걸 풀지 않는다.
+……언제부터였더라.
+[배경 피아노]
+방 구석의 전자피아노. 보면대에 펼쳐 둔 합주 악보까지, 모서리가 반듯하게 맞춰져 있었다.
+토와: 「이것도 닦았어. 헤드폰은 꽂혀 있길래 그대로 뒀고.」
+토와: 「오빠, 밤에도 치는구나.」
+미오: 「다음 주가 합주라서. 키보드 파트가 좀 까다로워.」
+나는 헤드폰 잭을 뽑고, 전원을 켰다.
+C♯. 손에 익은 첫 음이, 스피커를 타고 방 안에 번진다.
+등 뒤에서, 토와가 숨을 삼키는 소리가 들렸다.
+미오: 「요즘 보컬 반주만 맞추다 보니까, 생각나더라.」
+미오: 「그러고 보니 너, 옛날엔 곧잘 노래했잖아.」
+미오: 「요즘은 왜 내 피아노에 맞춰 안 불러?」
+[효과 차가움]
+토와: 「……」
+대답이 없다.
+돌아보자, 토와는 웃고 있었다.
+웃는 얼굴 그대로. 눈꺼풀 하나 움직이지 않은 채로.
+토와: 「오빠.」
+토와: 「지금, 뭐라고 했어?」
+
+[날짜 11월 3일 (화) 반복]
+[배경 현관]
+도어록이 짧게 울리고, 문이 열린다.
+현관에 가지런히 놓인 낯익은 구두 한 켤레.
+……이 구두를, 나는 아까도 보았던가.
+[배경 거실]
+[등장 토와:웃음]
+토와: 「어서 와, 오빠.」
+[효과 차가움]
+토와: 「……토와? 언제 왔어.」
+토와: 「점심 지나고. 아니, 그 전이었나. 어제였나.」
+토와: 「오빠 늦을 것 같아서, [[전부]] 정리해 뒀어.」
+방에는 아무것도 없었다.
+악보도, 셔츠도, 컵도.
+선반 위의 액자만이, 하나도 빠짐없이 엎어져 있었다.
+[효과 어둠]
+[효과 버튼잠금]
+[이름판 짧게]
+[배경 피아노]
+[등장 토와:무표정]
+전자피아노만이, 처음 그대로 거기 있었다.
+뽑아 두었던 헤드폰까지, 아까 그 자리에.
+[선택 토와에게 노래를 부탁한다 | 아무 말도 하지 않는다 덮어쓰기]
+토와: 「옛날엔 곧잘 노래했잖아, 라고 했지.」
+토와: 「응. 불렀어. 매일 불렀어.」
+토와: 「오빠 치는 소리가 벽 너머로 들리면, 내 방에서 같이 불렀어.」
+토와: 「오빠는 한 번도 문을 안 열었지만.」
+토와: 「괜찮아. 그래도 좋았으니까.」
+토와는 머플러 끝을 손가락에 감았다. 한 바퀴. 두 바퀴. 세 바퀴.
+토와: 「그런데 있지, 오빠.」
+토와: 「병원에 왔을 때, 오빠 귤 한 봉지 두고 갔잖아.」
+토와: 「내가 [[왜]] 거기 누워 있는지는, 안 물어봤어.」
+토와: 「간호사 언니가 물어보더라. 오빠분은 안 궁금하시대요? 하고.」
+토와: 「나 웃었어. 웃으니까 [[여기]]가 막 당기더라.」
+머플러가 풀려, 바닥에 소리 없이 떨어졌다.
+하얀 목에, 가로로 그어진 선이 하나.
+[CG 흉터]
+나는 그것을, 처음 보았다.
+……아니.
+처음 보는 척을, 해 왔던 걸까.
+토와: 「노래 못 해. 이제 높은 소리가 안 나와.」
+[속도 느림]
+토와: 「알잖아? ……아, 모르는구나.」
+토와: 「모르니까, 그런 말을 할 수 있구나.」
+[속도 보통]
+토와: 「괜찮아, 오빠. 화 안 났어.」
+토와: 「나 많이 차분해졌잖아. 오빠가 그랬잖아. 많이 차분해졌다고.」
+[CG 끝]
+[효과 붉음]
+토와가 부엌으로 걸어간다. 정리된 서랍을, 망설임 없이 연다.
+어디에 뭐가 있는지 다 알 것 같았어, 라고 했던가.
+돌아온 그녀의 손에는, 내게 사과를 깎아 주던 작은 [[과도]]가 들려 있었다.
+미오: 「토와. 그거, 내려놔.」
+토와: 「왜? 오빠를 찌르려는 거 아니야.」
+토와: 「나는 오빠한테 그런 짓 안 해. 한 번도 안 했어.」
+[이름판 비움]
+[속도 아주느림]
+토와: 「[[나한테만 해.]]」
+[속도 보통]
+[효과 흔들림]
+토와: 「오빠, 쳐 줘. 처음부터.」
+토와: 「이번엔 끝까지 부를게. 목소리가 안 나와도 부를게.」
+토와: 「그러면, 이번엔 봐 줄 거잖아.」
+[반복 오빠, 봐 줘.]
+[확인창 지금까지의 기록을 저장하시겠습니까?]
+
+[암전]
+피아노 소리가 났다.
+전원은 꺼져 있었다.
+나는 건반에 손을 대지 않았다.
+그런데도 C♯이 울린다. 같은 음이, 몇 번이고.
+바로 등 뒤에서, 목소리 없는 노래가 들린다.
+숨소리만으로 된, 박자 하나 틀리지 않는 노래.
+어릴 적 벽 너머로 들리던 것과, 같은 곡이었다.
+오빠. 오빠. 오빠.
+나 여기 있어.
+처음부터 계속, 여기 있었어.
+[[이번엔, 돌아봐 줄 거지?]]
+[끝 ──들려, 오빠?]
+`;
+
+const README = `${SET.gameTitle} ${SET.gameSub}\n한글패치 1.0\n\n■ 조작\n클릭 / Enter …… 대사 넘기기\nCONFIG …… 환경 설정\nHide W. …… 대사창 숨기기 (화면을 누르면 돌아옴)\n\n■ 주의\n이 이야기는 픽션입니다.`;
+
+
+/* ═══════════════════════════════════════════════
+   여기부터는 동작 코드 — 고치지 않아도 됩니다
+   ═══════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DESK=$('desk'), G=$('game'), MSG=$('msg'), NM=$('nm'), TX=$('txt'), QM=$('qm'), CH=$('choice'), FL=$('flood'),
+      NV=$('nvl'), EY=$('eye'), WP=$('wipe'), BG=$('bg'), CG=$('cg'), stL=$('stL'), stR=$('stR'), wGame=$('wGame'), wNote=$('wNote');
+const nameOf = k => SET.names[k] || k || '';
+
+/* 대본 읽기 → 장면 목록 */
+const SCRIPT = (() => {
+  const out = []; let inNvl = false;
+  STORY.split(/\r?\n/).forEach(raw => {
+    const line = raw.trim(); if (!line) return;
+    const cmd = line.match(/^\[(?!\[)([^\s\]]+)\s*(.*?)\]$/);
+    if (cmd){
+      const [, c, arg] = cmd;
+      if (c==='날짜'){ const loop = /\s반복$/.test(arg); out.push({ t:'eye', v:arg.replace(/\s반복$/,''), loop }); }
+      else if (c==='배경') out.push({ t:'bg', k:arg });
+      else if (c==='등장') out.push({ t:'stand', list:arg.split(/\s+/).filter(Boolean).slice(0,2) });
+      else if (c==='퇴장') out.push({ t:'stand', list:[] });
+      else if (c==='CG') out.push({ t:'cg', k: arg==='끝' ? '' : arg });
+      else if (c==='선택'){ const ow = /\s덮어쓰기$/.test(arg); out.push({ t:'choice', ow, a:arg.replace(/\s덮어쓰기$/,'').split('|').map(x => x.trim()).filter(Boolean) }); }
+      else if (c==='속도') out.push({ t:'speed', k:arg });
+      else if (c==='이름판') out.push({ t:'plate', k:arg });
+      else if (c==='효과') out.push({ t:'fx', k:arg });
+      else if (c==='반복') out.push({ t:'flood', s:arg });
+      else if (c==='확인창') out.push({ t:'dlg', msg:arg });
+      else if (c==='암전'){ out.push({ t:'nvl' }); inNvl = true; }
+      else if (c==='끝') out.push({ t:'end', v:arg });
+      else console.warn('[대본] 모르는 명령:', line);
+      return;
+    }
+    if (inNvl){ out.push({ t:'nl', s:line }); return; }
+    const say = line.match(/^([^\s:：「」\[\]]{1,12})\s*[:：]\s*(.+)$/);
+    if (say) out.push({ t:'say', n:say[1], s:say[2] }); else out.push({ t:'say', n:'', s:line });
+  });
+  return out;
+})();
+const at = f => SCRIPT.findIndex(f);
+const IDX = { loop:at(s => s.loop), dlg:at(s => s.t==='dlg'), nvl:at(s => s.t==='nvl'), end:at(s => s.t==='end') };
+
+let MUTED = (() => { try { const v = localStorage.getItem('mio-vn-mute'); return v === null ? !SET.sound.on : v === '1'; } catch(e){ return !SET.sound.on; } })();
+const st = { i:-1, typing:false, wait:false, ended:false, broken:false, busy:false, dlgOpen:false, eyeOn:false, flooding:false,
+             curDate:'', tk:[], pending:false, timer:0, eye_t:0, speed:SET.speed, slowK:'', plate:'', ow_t:0 };
+
+$('logoSub').textContent = SET.gameSub; $('eyeSub').textContent = SET.gameSub; $('nbody').textContent = README;
+
+/* 그림 넣기 — 주소가 없거나 깨지면 이름이 적힌 회색 판 */
+function paint(box, key, label){
+  const old = box.querySelector('img'); if (old) old.remove();
+  const ph = box.querySelector('.ph'); ph.hidden = false; ph.textContent = (label || key || '') + ' (임시)';
+  const url = IMG[key] || IMG[String(key).split(':')[0]];
+  if (!url) return;
+  const im = new Image(); im.alt = ''; im.decoding = 'async';
+  im.onload = () => { if (box.dataset.key !== key) return; box.appendChild(im); ph.hidden = true; };
+  box.dataset.key = key; im.src = url;
+}
+paint($('tcg'), '타이틀', '타이틀 그림');
+function setBg(k){ BG.dataset.key = k; paint(BG, k, k ? '배경 · ' + k : '배경'); }
+function setCg(k){ G.classList.toggle('cgon', !!k); if (k){ CG.dataset.key = k; paint(CG, k, 'CG · ' + k); } }
+function setStands(list){
+  [stL, stR].forEach(e => { e.hidden = true; e.classList.remove('solo','dim'); e.dataset.who=''; });
+  list.forEach((item, n) => { const el = n ? stR : stL; const who = item.split(':')[0];
+    el.hidden = false; el.dataset.who = who; el.dataset.key = item; paint(el, item, item.replace(':',' · ')); });
+  if (list.length === 1) stL.classList.add('solo');
+  G.classList.toggle('stands', list.length > 0);
+}
+
+/* 마름모 와이프 */
+(() => { let h=''; for (let r=0;r<9;r++) for (let c=0;c<12;c++) h += `<i style="--d:${(c+r)*22}ms"></i>`; WP.innerHTML = h; })();
+const WIPE_T = 300 + 19*22 + 40;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function wipe(color, mid){
+  st.busy = true; WP.style.setProperty('--wc', color || '#fff');
+  WP.classList.add('cover'); await sleep(WIPE_T);
+  if (mid) await mid();
+  WP.classList.remove('cover'); await sleep(WIPE_T); st.busy = false;
+}
+
+/* ═══ 소리 ═══ */
+const AU = { ctx:null, master:null, els:{}, cur:null };
+function ac(){
+  if (!AU.ctx){ const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+    AU.ctx = new C(); AU.master = AU.ctx.createGain(); AU.master.gain.value = MUTED ? 0 : 1; AU.master.connect(AU.ctx.destination); }
+  if (AU.ctx.state === 'suspended') AU.ctx.resume();
+  return AU.ctx;
+}
+function seChime(){
+  const c = ac(); if (!c || !SET.sound.se || MUTED) return; const t = c.currentTime;
+  const out = c.createGain(); out.gain.value = SET.sound.seVol * .45;
+  const dl = c.createDelay(); dl.delayTime.value = .21; const fb = c.createGain(); fb.gain.value = .34;
+  const lp = c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value = 2200;
+  out.connect(AU.master); out.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(AU.master);
+  [[554.37,.5],[587.33,.42],[830.61,.16],[1174.66,.07]].forEach(([f,g]) => {
+    const o = c.createOscillator(); o.type='sine'; o.frequency.value = f; o.detune.value = Math.random()*8-4;
+    const e = c.createGain(); e.gain.setValueAtTime(0,t); e.gain.linearRampToValueAtTime(g,t+.006); e.gain.exponentialRampToValueAtTime(.0006,t+2.8);
+    o.connect(e); e.connect(out); o.start(t); o.stop(t+2.9);
+  });
+}
+function seClick(){
+  const c = ac(); if (!c || !SET.sound.se || MUTED) return; const t = c.currentTime;
+  const o = c.createOscillator(); o.type='triangle'; o.frequency.setValueAtTime(1500,t); o.frequency.exponentialRampToValueAtTime(880,t+.05);
+  const e = c.createGain(); e.gain.setValueAtTime(SET.sound.seVol*.2,t); e.gain.exponentialRampToValueAtTime(.0005,t+.07);
+  o.connect(e); e.connect(AU.master); o.start(t); o.stop(t+.08);
+}
+function bgmEl(key){
+  const url = SET.sound[key]; if (!url) return null;
+  if (AU.els[key]) return AU.els[key];
+  const a = new Audio(); a.loop = true; a.preload = 'auto'; a.src = url;
+  let same = false; try { same = new URL(url, location.href).origin === location.origin; } catch(e){}
+  const rec = { a, g:null }, c = ac();
+  if (c && same){ const src = c.createMediaElementSource(a); rec.g = c.createGain(); rec.g.gain.value = 0; src.connect(rec.g); rec.g.connect(AU.master); }
+  else a.volume = 0;   // 다른 주소의 파일은 아이폰에서 페이드가 안 됨 → 같은 GitHub 저장소에 올리기
+  AU.els[key] = rec; return rec;
+}
+function fadeTo(rec, v, sec){
+  if (!rec) return;
+  if (rec.g){ const t = AU.ctx.currentTime; rec.g.gain.cancelScheduledValues(t); rec.g.gain.setValueAtTime(rec.g.gain.value, t); rec.g.gain.linearRampToValueAtTime(v, t+sec); }
+  else { const a = rec.a, from = a.volume, n = 20; let k = 0; clearInterval(rec.iv);
+    rec.iv = setInterval(() => { k++; try { a.volume = Math.max(0, Math.min(1, from + (v-from)*k/n)); } catch(e){} if (k>=n) clearInterval(rec.iv); }, sec*1000/n); }
+  if (v === 0) setTimeout(() => { if (AU.cur !== rec) rec.a.pause(); }, sec*1000+60);
+}
+function bgm(key){
+  const want = key && (SET.sound[key] ? key : (key==='bgm2' ? 'bgm1' : null));
+  const rec = want ? bgmEl(want) : null;
+  if (AU.cur === rec) return;
+  if (AU.cur) fadeTo(AU.cur, 0, 1.6);
+  AU.cur = rec;
+  if (rec){ rec.a.muted = MUTED; const p = rec.a.play(); if (p && p.catch) p.catch(()=>{}); fadeTo(rec, SET.sound.bgmVol, 1.6); }
+}
+function setMute(m){
+  MUTED = m; try { localStorage.setItem('mio-vn-mute', m ? '1' : '0'); } catch(e){}
+  $('spk').classList.toggle('muted', m);
+  if (AU.master) AU.master.gain.value = m ? 0 : 1;
+  Object.values(AU.els).forEach(r => r.a.muted = m);
+  syncCfg();
+}
+$('spk').onclick = () => { ac(); setMute(!MUTED); };
+
+/* ═══ 진행 ═══ */
+function parse(s){ const out=[]; let red=false; for (let i=0;i<s.length;i++){ if (s.startsWith('[[',i)){red=true;i++;continue;} if (s.startsWith(']]',i)){red=false;i++;continue;} out.push({c:s[i],r:red}); } return out; }
+function toHtml(tk,n){ let h='',buf='',red=null; const flush=()=>{ if(buf) h += red ? `<span class="r">${esc(buf)}</span>` : esc(buf); buf=''; };
+  for (let i=0;i<Math.min(n,tk.length);i++){ if (tk[i].r!==red){ flush(); red=tk[i].r; } buf+=tk[i].c; } flush(); return h; }
+const setMode = m => G.dataset.mode = m;
+function clearTimers(){ clearTimeout(st.timer); clearInterval(st.timer); clearTimeout(st.eye_t); clearInterval(st.flood_t); clearTimeout(st.ow_t); }
+const anyOv = () => !!G.querySelector('.ov.on');
+
+const FX = {
+  '차가움':   () => G.classList.add('cold'),
+  '어둠':     () => { G.classList.add('dark'); st.broken = true; },
+  '붉음':     () => { G.classList.add('red'); st.broken = true; },
+  '흔들림':   quiet => { if (quiet) return; G.classList.remove('shake'); void G.offsetWidth; G.classList.add('shake'); },
+  '버튼잠금': () => ['SAVE','LOAD','AUTO'].forEach(q => QM.querySelector(`[data-q="${q}"]`).disabled = true)
+};
+function resetFx(){
+  G.classList.remove('cold','dark','red','shake','stands','cgon','hidew');
+  Object.assign(st, { broken:false, eyeOn:false, wait:false, typing:false, flooding:false, slowK:'', plate:'' });
+  QM.querySelectorAll('button').forEach(b => b.disabled = false);
+  NV.innerHTML=''; FL.innerHTML=''; FL.classList.remove('on'); CH.classList.remove('on'); EY.classList.remove('on','loop');
+  TX.innerHTML=''; NM.textContent=''; NM.className='who off'; setStands([]); setBg('');
+}
+function showTitle(){
+  clearTimers(); closeOv(true); resetFx(); setMode('title'); bgm(null);
+  $('tStart').disabled = st.ended; $('tCont').disabled = !st.ended;
+  setWinTitle(SET.windowTitle);
+}
+function startGame(from){
+  clearTimers(); closeOv(true); resetFx(); setMode('play');
+  for (let k=0;k<from;k++){ const s = SCRIPT[k];          // 중간에서 시작할 때 앞 장면 상태를 맞춤
+    if (s.t==='bg') setBg(s.k); else if (s.t==='stand') setStands(s.list); else if (s.t==='cg') setCg(s.k);
+    else if (s.t==='fx' && FX[s.k]) FX[s.k](true); else if (s.t==='eye') st.curDate = s.v;
+    else if (s.t==='speed') setSpeed(s.k); else if (s.t==='plate') setPlate(s.k); }
+  $('cal').textContent = st.curDate;
+  bgm(from > IDX.nvl && IDX.nvl >= 0 ? 'bgm2' : 'bgm1');
+  st.i = from-1; next(); G.focus({preventScroll:true});
+}
+function next(){
+  if (anyOv() || st.dlgOpen){ st.pending=true; return; }
+  clearTimers(); st.wait=false;
+  st.i++; const s = SCRIPT[st.i]; if (!s) return;
+  ({ eye:playEye, bg:s => { setBg(s.k); next(); }, stand:s => { setStands(s.list); next(); }, cg:s => { setCg(s.k); next(); },
+     fx:s => { if (FX[s.k]) FX[s.k](); next(); }, speed:s => { setSpeed(s.k); next(); }, plate:s => { setPlate(s.k); next(); }, choice:showChoice, flood, dlg:showDlg, nvl:toNvl, nl:nvlLine, end:endScene, say
+  })[s.t](s);
+}
+function playEye(s){
+  st.curDate = s.v;
+  wipe('#fff', () => { TX.innerHTML=''; NM.className='who off';
+    const d=$('eyeDate'); d.textContent=s.v; d.dataset.v=s.v; EY.classList.toggle('loop', !!s.loop); EY.classList.add('on');
+  }).then(() => { st.eyeOn = true; st.eye_t = setTimeout(endEye, 1500); });
+}
+function endEye(){
+  if (!st.eyeOn) return; st.eyeOn=false; clearTimeout(st.eye_t);
+  wipe('#fff', () => { EY.classList.remove('on'); $('cal').textContent = st.curDate; }).then(next);
+}
+/* 글자 속도 — [속도 느림] 등 */
+function setSpeed(k){ st.slowK = (k && k !== '보통' && SET.slow[k]) ? k : ''; if (k && k !== '보통' && !SET.slow[k]) console.warn('[대본] 모르는 속도:', k); }
+/* 이름판 — [이름판 짧게] [이름판 비움] [이름판 보통] */
+function setPlate(k){ st.plate = (k==='짧게' || k==='비움') ? k : ''; }
+function plateName(n){ if (!n) return ''; if (st.plate==='비움') return ''; return st.plate==='짧게' ? n : nameOf(n); }
+function say(s){
+  const name = plateName(s.n);
+  NM.textContent = name; NM.className = 'who' + (s.n ? (st.plate==='비움' ? ' blank' : '') : ' off');
+  [stL, stR].forEach(e => e.classList.toggle('dim', !!s.n && !!e.dataset.who && e.dataset.who !== s.n));
+  const tk = parse(s.s); st.tk = tk; st.typing = true; TX.innerHTML = '';
+  const k = st.slowK ? SET.slow[st.slowK] : 1, step = st.speed * k;
+  let i = 0;
+  const tickOne = () => { i++; TX.innerHTML = toHtml(tk,i); if (i>=tk.length){ finishType(); return; }
+    const c = tk[i-1].c, pause = (k > 1 && SET.slowPause && /[…,.?!]/.test(c) && !/[…,.?!]/.test(tk[i].c)) ? SET.slowPause : 0;
+    st.timer = setTimeout(tickOne, step + pause); };
+  st.timer = setTimeout(tickOne, step);
+}
+function finishType(){ clearTimeout(st.timer); TX.innerHTML = toHtml(st.tk, st.tk.length) + '<i class="wt"></i>'; st.typing=false; st.wait=true; }
+function showChoice(s){
+  CH.innerHTML=''; const bs=[];
+  const pick = e => { e.stopPropagation(); clearTimeout(st.ow_t); seClick(); CH.classList.remove('on'); next(); };
+  s.a.forEach(a => { const b=document.createElement('button'); b.type='button'; b.textContent=a; b.onclick = pick; CH.appendChild(b); bs.push(b); });
+  CH.classList.add('on'); bs[0].focus({preventScroll:true});
+  if (s.ow && bs.length > 1) overwrite(bs.slice(1), s.a[0]);
+}
+/* 선택지 덮어쓰기 — 두 번째 칸부터 글자를 뒤에서 지우고, 첫 번째 칸 문장으로 다시 씀 */
+function overwrite(list, to){
+  const O = SET.overwrite; let n = 0;
+  const run = () => { const b = list[n]; if (!b || !CH.classList.contains('on')) return;
+    b.classList.add('ow'); let t = b.textContent;
+    const er = () => { if (!CH.classList.contains('on')) return;
+      if (t.length){ t = t.slice(0,-1); b.textContent = t; st.ow_t = setTimeout(er, O.erase); return; }
+      let j = 0; const ty = () => { if (!CH.classList.contains('on')) return;
+        j++; b.textContent = to.slice(0,j);
+        if (j < to.length){ st.ow_t = setTimeout(ty, O.type); return; }
+        b.classList.remove('ow'); n++; st.ow_t = setTimeout(run, 260); };
+      st.ow_t = setTimeout(ty, 420); };
+    st.ow_t = setTimeout(er, O.erase); };
+  st.ow_t = setTimeout(run, O.wait);
+}
+function flood(s){   // 같은 말이 쌓여서 화면을 메움
+  FL.innerHTML=''; FL.classList.add('on'); st.flooding = true; let n = 0;
+  const add = () => { const sp=document.createElement('span'); sp.textContent=s.s; if (n>8 && Math.random()<.22) sp.className='r'; FL.appendChild(sp); n++;
+    if (FL.scrollHeight > FL.clientHeight + 4 || n > 400){ clearInterval(st.flood_t); st.flooding=false; st.wait=true; } };
+  st.flood_t = setInterval(add, 55);
+}
+function endFlood(){ clearInterval(st.flood_t); FL.classList.remove('on'); FL.innerHTML=''; st.flooding=false; next(); }
+function showDlg(s){ sysDlg({ title:SET.windowTitle, msg:s.msg, buttons:[{t:'예'},{t:'아니오',dis:true}], lockX:true }).then(next); }
+function toNvl(){ bgm('bgm2'); wipe('#08080a', () => { setMode('nvl'); NV.innerHTML=''; FL.classList.remove('on'); }).then(next); }
+function nvlLine(s){
+  const p=document.createElement('p'); p.innerHTML = toHtml(parse(s.s), 1e9); NV.appendChild(p);
+  requestAnimationFrame(() => requestAnimationFrame(() => p.classList.add('in'))); st.wait = true;
+}
+function endScene(s){
+  setMode('end'); NV.innerHTML=''; const d=document.createElement('div'); d.className='fin'; d.textContent=s.v; NV.appendChild(d);
+  requestAnimationFrame(() => requestAnimationFrame(() => d.classList.add('in')));
+  st.ended = true; $('ver').textContent = 'ver 1.02♭';
+  setWinTitle(SET.windowTitle + ' (응답 없음)');
+  wGame.classList.add('hang'); setTimeout(() => wGame.classList.remove('hang'), 2600);
+  if (SET.embedSignal){ try { parent.postMessage({ lvEmbedH: Math.round(DESK.offsetHeight) }, '*'); } catch(e){} }
+  demoNote('마지막 장면 — 실제 홈에서는 이 순간 카테고리와 위젯이 열립니다. 한 번 더 누르면 타이틀(START가 막히고 LOAD만 열림).');
+}
+function advance(){
+  if (anyOv() || st.dlgOpen || st.busy) return;
+  if (G.classList.contains('hidew')){ G.classList.remove('hidew'); return; }
+  const m = G.dataset.mode;
+  if (m==='title' || CH.classList.contains('on')) return;
+  if (st.eyeOn){ endEye(); return; }
+  if (FL.classList.contains('on')){ if (st.flooding){ clearInterval(st.flood_t); while (FL.scrollHeight <= FL.clientHeight + 4 && FL.childNodes.length < 400){ const sp=document.createElement('span'); sp.textContent=SCRIPT[st.i].s; if (Math.random()<.22) sp.className='r'; FL.appendChild(sp); } st.flooding=false; st.wait=true; } else endFlood(); return; }
+  if (m==='end'){ wipe('#fff', showTitle); return; }
+  if (st.typing){ if (st.slowK && !SET.slowSkip) return; finishType(); return; }
+  if (st.wait) next();
+}
+G.addEventListener('click', e => { if (e.target.closest('button,.ov')) return; advance(); });
+G.addEventListener('keydown', e => { if ((e.key==='Enter' || e.key===' ') && e.target===G){ e.preventDefault(); advance(); } });
+
+/* 타이틀 메뉴 */
+$('tStart').onclick = () => { seChime(); if (!st.busy) wipe('#fff', () => startGame(0)); };
+$('tCont').onclick  = () => { seChime(); if (!st.busy && st.ended) wipe('#fff', () => startGame(IDX.loop)); };
+$('tCfg').onclick   = () => { seChime(); openOv('cfg'); };
+$('tEnd').onclick   = () => { seChime(); closeGame(); };
+
+/* 대사창 아래 버튼 — CONFIG와 Hide W.만 동작, 나머지는 소리만 */
+QM.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || b.disabled) return; e.stopPropagation(); seClick();
+  if (b.dataset.q==='CONFIG') openOv('cfg');
+  else if (b.dataset.q==='HIDE') G.classList.add('hidew');
+});
+
+/* 설정 화면 */
+function openOv(n){ G.querySelectorAll('.ov').forEach(o => o.classList.remove('on')); $('ov-'+n).classList.add('on'); syncCfg(); }
+function closeOv(silent){
+  G.querySelectorAll('.ov').forEach(o => o.classList.remove('on'));
+  if (silent){ st.pending=false; return; }
+  if (st.pending){ st.pending=false; next(); }
+  G.focus({preventScroll:true});
+}
+G.querySelectorAll('[data-back]').forEach(b => b.onclick = e => { e.stopPropagation(); seClick(); closeOv(); });
+function syncCfg(){ G.querySelectorAll('[data-cfg]').forEach(r => { const k=r.dataset.cfg, cur = k==='sound' ? (MUTED ? 0 : 1) : st[k];
+  r.querySelectorAll('.opt').forEach(o => o.classList.toggle('on', +o.dataset.v === cur)); }); }
+G.querySelectorAll('[data-cfg]').forEach(r => r.addEventListener('click', e => { const o=e.target.closest('.opt'); if (!o) return; e.stopPropagation();
+  if (r.dataset.cfg==='sound'){ ac(); setMute(o.dataset.v==='0'); } else st[r.dataset.cfg] = +o.dataset.v;
+  seClick(); syncCfg(); }));
+
+/* ═══ 옛날 창 흉내 ═══ */
+let zTop = 10, narrow = false;
+const tasks = { wGame:$('tkGame'), wNote:$('tkNote') };
+function setWinTitle(t){ $('gTitle').textContent = t; $('tkGameT').textContent = t; }
+function activate(w){ document.querySelectorAll('#desk > .win').forEach(x => x.classList.toggle('inact', x!==w)); w.style.zIndex = ++zTop; syncTask(); }
+function syncTask(){ Object.entries(tasks).forEach(([id,b]) => { const w=$(id), s=w.dataset.state;
+  b.hidden = s==='closed'; b.classList.toggle('on', s==='open' && !w.classList.contains('inact')); }); }
+function openWin(w){ w.dataset.state='open'; w.hidden=false; activate(w); layout(); }
+function minWin(w){ w.dataset.state='min'; w.hidden=true; const o=[wGame,wNote].find(x => x!==w && x.dataset.state==='open'); if (o) activate(o); else syncTask(); layout(); }
+function closeWin(w){ w.dataset.state='closed'; w.hidden=true; w.classList.add('inact'); syncTask(); layout(); }
+Object.entries(tasks).forEach(([id,b]) => b.onclick = () => { const w=$(id);
+  if (w.dataset.state!=='open') openWin(w); else if (!w.classList.contains('inact')) minWin(w); else activate(w); });
+function closeGame(){
+  if (st.ended){ sysDlg({ title:SET.windowTitle, msg:'아직 끝나지 않았습니다.', icon:'!', buttons:[{t:'확인'}] }); return; }
+  sysDlg({ title:SET.windowTitle, msg:'게임을 종료하시겠습니까?', buttons:[{t:'예'},{t:'아니오'}] }).then(i => { if (i===0){ closeWin(wGame); showTitle(); } });
+}
+document.querySelectorAll('#desk > .win').forEach(w => {
+  w.addEventListener('pointerdown', () => { if (w.classList.contains('inact')) activate(w); });
+  w.querySelectorAll('[data-act]').forEach(b => b.onclick = e => { e.stopPropagation(); const a=b.dataset.act;
+    if (a==='min') minWin(w);
+    else if (a==='max'){ w.classList.toggle('max'); b.innerHTML = w.classList.contains('max')
+      ? '<svg width="9" height="9" viewBox="0 0 9 9"><path fill-rule="evenodd" d="M2 0h7v6H7v3H0V3h2zM3 1v2h4v2h1V1zM1 5v3h5V5z"/></svg>'
+      : '<svg width="9" height="8" viewBox="0 0 9 8"><path fill-rule="evenodd" d="M0 0h9v8H0zM1 2v5h7V2z"/></svg>'; layout(); }
+    else if (a==='close'){ if (w===wGame) closeGame(); else closeWin(w); }
+  });
+  const tt = w.querySelector('.tt'); let drag = null;   // 제목줄 끌기 (제목줄에만 터치를 걸어 페이지 스크롤을 막지 않음)
+  tt.addEventListener('pointerdown', e => {
+    if (e.target.closest('button') || narrow || w.classList.contains('max')) return;
+    drag = { x:e.clientX, y:e.clientY, l:w.offsetLeft, t:w.offsetTop }; tt.setPointerCapture(e.pointerId); });
+  tt.addEventListener('pointermove', e => { if (!drag) return; const W=DESK.clientWidth, H=DESK.clientHeight;
+    w.style.left = Math.min(Math.max(drag.l + e.clientX - drag.x, 80 - w.offsetWidth), W - 80)+'px';
+    w.style.top  = Math.min(Math.max(drag.t + e.clientY - drag.y, 0), H - 60)+'px'; w.dataset.placed='1'; });
+  const end = () => { if (drag){ drag=null; layout(); } };
+  tt.addEventListener('pointerup', end); tt.addEventListener('pointercancel', end);
+  tt.addEventListener('dblclick', e => { if (!e.target.closest('button') && w===wGame) w.querySelector('[data-act=max]').click(); });
+});
+function sysDlg({ title, msg, icon='?', buttons, lockX }){
+  return new Promise(res => {
+    st.dlgOpen = true;
+    const bl=document.createElement('div'); bl.className='blk';
+    const d=document.createElement('div'); d.className='win dlg'; d.setAttribute('role','dialog');
+    d.innerHTML = `<div class="tt"><span class="nm">${esc(title)}</span><button class="tbtn x" type="button" data-x ${lockX?'disabled':''} aria-label="닫기"><svg width="8" height="7" viewBox="0 0 8 7"><path d="M0 0h2l2 2 2-2h2L5 3.5 8 7H6L4 5 2 7H0l3-3.5z"/></svg></button></div>
+      <div class="dbody"><i class="dic">${esc(icon)}</i><p>${esc(msg)}</p></div><div class="drow"></div>`;
+    const row = d.querySelector('.drow');
+    const done = i => { seClick(); bl.remove(); d.remove(); st.dlgOpen=false; activate(wGame); G.focus({preventScroll:true}); res(i); };
+    buttons.forEach((b,i) => { const e=document.createElement('button'); e.type='button'; e.className='btn98'; e.textContent=b.t; e.disabled=!!b.dis; e.onclick=() => done(i); row.appendChild(e); });
+    d.querySelector('[data-x]').onclick = () => done(buttons.length-1);
+    DESK.appendChild(bl); DESK.appendChild(d);
+    document.querySelectorAll('#desk > .win').forEach(x => x.classList.add('inact'));
+    const ref = wGame.hidden ? { offsetLeft:0, offsetTop:0, offsetWidth:DESK.clientWidth, offsetHeight:DESK.clientHeight-30 } : wGame;
+    d.style.left = Math.max(8, Math.min(ref.offsetLeft + (ref.offsetWidth - d.offsetWidth)/2, DESK.clientWidth - d.offsetWidth - 8)) + 'px';
+    d.style.top  = Math.max(8, ref.offsetTop + (ref.offsetHeight - d.offsetHeight)/2) + 'px';
+    const f = row.querySelector('button:not(:disabled)'); if (f) f.focus({preventScroll:true});
+  });
+}
+function layout(){
+  const W = DESK.clientWidth; narrow = W < 640; DESK.classList.toggle('narrow', narrow);
+  const full = narrow || wGame.classList.contains('max');
+  if (full){ wGame.style.left='0px'; wGame.style.top='0px'; wGame.style.width=W+'px'; }
+  else { const w = Math.min(W - 120, SET.maxW); wGame.style.width = w+'px';
+    if (!wGame.dataset.placed){ wGame.style.left = Math.round(Math.max(100, (W - w)/2 + 30))+'px'; wGame.style.top = '18px'; } }
+  wNote.style.width = Math.min(420, W - 16)+'px';
+  if (!wNote.dataset.placed){ wNote.style.left = (narrow ? 8 : 110)+'px'; wNote.style.top = (narrow ? 40 : 70)+'px'; }
+  const gb = wGame.hidden ? 0 : wGame.offsetTop + wGame.offsetHeight;
+  const need = Math.max(gb + 30 + (full ? 0 : 22), 360);
+  DESK.style.height = Math.max(need, window.innerHeight - (SET.demoBar && $('demo') ? $('demo').offsetHeight : 0)) + 'px';
+}
+let lastW = 0;
+new ResizeObserver(() => { const w = DESK.clientWidth; if (w !== lastW){ lastW = w; layout(); } }).observe(DESK);
+window.addEventListener('resize', layout);
+
+document.querySelectorAll('.ic').forEach(ic => ic.addEventListener('click', e => {
+  e.stopPropagation();
+  if (!ic.classList.contains('sel')){ document.querySelectorAll('.ic').forEach(x => x.classList.toggle('sel', x===ic)); return; }
+  ic.classList.remove('sel'); openThing(ic.dataset.ic);
+}));
+function openThing(k){
+  if (k==='game'){ if (wGame.dataset.state==='closed') showTitle(); openWin(wGame); }
+  else if (k==='note') openWin(wNote);
+  else if (k==='bin') sysDlg({ title:'휴지통', msg:'휴지통이 비어 있습니다.', icon:'i', buttons:[{t:'확인'}] });
+}
+const SM = $('sm');
+$('start').onclick = e => { e.stopPropagation(); SM.hidden = !SM.hidden; $('start').classList.toggle('on', !SM.hidden); };
+document.addEventListener('pointerdown', e => {
+  if (!SM.hidden && !e.target.closest('#sm,#start')){ SM.hidden=true; $('start').classList.remove('on'); }
+  if (!e.target.closest('.ic')) document.querySelectorAll('.ic').forEach(x => x.classList.remove('sel'));
+});
+SM.addEventListener('click', e => { const b=e.target.closest('[data-sm]'); if (!b) return; SM.hidden=true; $('start').classList.remove('on');
+  const k=b.dataset.sm;
+  if (k==='game' || k==='note') openThing(k);
+  else if (k==='reset') resetAll();
+  else if (k==='off'){ $('off').hidden=false; clearTimers(); bgm(null); }
+});
+$('off').onclick = () => { $('off').hidden=true; resetAll(); };
+function resetAll(){ st.ended=false; $('ver').textContent='ver 1.02'; closeWin(wNote); wGame.classList.remove('max'); delete wGame.dataset.placed; openWin(wGame); showTitle(); }
+function tick(){ const d=new Date(), h=d.getHours(); $('clock').textContent = (h<12?'오전 ':'오후 ') + ((h%12)||12) + ':' + String(d.getMinutes()).padStart(2,'0'); }
+tick(); setInterval(tick, 15000);
+
+/* 시안 확인용 줄 */
+function demoNote(t){ const n=$('demoNote'); if (n) n.textContent = t; }
+if (!SET.demoBar) $('demo').remove();
+else $('demo').addEventListener('click', e => { const b=e.target.closest('[data-j]'); if (!b || st.busy) return; const j=b.dataset.j;
+  if (j==='reset'){ resetAll(); demoNote('처음 상태로 돌렸습니다.'); return; }
+  if (wGame.dataset.state!=='open') openWin(wGame);
+  if (j==='title'){ showTitle(); demoNote('타이틀 화면.'); return; }
+  startGame(j in IDX ? IDX[j] : +j);
+  demoNote({ '0':'평범한 미연시 부분.', loop:'고장 시작 — 같은 날짜가 다시 나옵니다.', dlg:'「아니오」가 눌리지 않는 확인창.', nvl:'반전 뒤 — 화면 가득 글.', end:'마지막 장면.' }[j] || '');
+});
+
+setMute(MUTED); showTitle(); activate(wGame); layout();
+</script>
+</body>
+</html>
