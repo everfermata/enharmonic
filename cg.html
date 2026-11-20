@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CG鑑賞 ─ 澪標</title>
+<!-- ─────────────────────────────────────────────
+  luvlog.me/mio · 다크 테마 가운데 위젯 「CG鑑賞」 수정본1
+  올리는 곳: GitHub 저장소 enharmonic 맨 위에 cg.html (이 이름 그대로)
+  러브로그: HTML 위젯 → <iframe src="https://everfermata.github.io/enharmonic/cg.html" ...>
+  고칠 곳: 아래 <script> 맨 위의 SET(설정)과 CG(그림 목록)만 고치면 됩니다.
+  ※ 쉼표(,)와 따옴표(')를 빠뜨리면 위젯이 안 뜹니다. 한 줄 고칠 때마다 짝을 확인하세요.
+───────────────────────────────────────────── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --w-face:#c0c0c0; --w-hi:#ffffff; --w-lt:#dfdfdf; --w-sh:#808080; --w-dk:#0a0a0a;
+  --kr:"Nanum Gothic","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --logo:"Zen Kaku Gothic New","Nanum Gothic",sans-serif;
+  --out:inset -1px -1px var(--w-dk),inset 1px 1px var(--w-hi),inset -2px -2px var(--w-sh),inset 2px 2px var(--w-lt);
+  --in:inset 1px 1px var(--w-dk),inset -1px -1px var(--w-hi),inset 2px 2px var(--w-sh),inset -2px -2px var(--w-lt);
+  --sunk:inset 1px 1px var(--w-sh),inset -1px -1px var(--w-hi),inset 2px 2px var(--w-dk),inset -2px -2px var(--w-lt);
+  --ratio:3 / 2;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:transparent}
+body{font-family:var(--kr);font-size:12px;color:#000;-webkit-text-size-adjust:100%;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit}
+
+/* ── 창 ── */
+.win{background:var(--w-face);padding:3px;box-shadow:var(--out);max-width:var(--maxw,100%);margin:0 auto}
+.tt{display:flex;align-items:center;gap:5px;height:20px;padding:0 4px;background:linear-gradient(90deg,#000,#8c8c8c);color:#fff;font-weight:800;cursor:default}
+.tt svg{width:16px;height:16px;flex:none}
+.tt .nm{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;letter-spacing:.02em}
+.tt .rate{flex:none;font-weight:700;font-size:11px;color:#e4e4e6;letter-spacing:.04em}
+
+/* ── 보기 화면 ── */
+.view{position:relative;margin-top:2px;padding:2px;background:#000;box-shadow:var(--sunk)}
+.stage{position:relative;aspect-ratio:var(--ratio);overflow:hidden;background:#050506;touch-action:pan-y;cursor:grab;outline:0}
+.stage.drag{cursor:grabbing}
+.stage:focus-visible{box-shadow:inset 0 0 0 1px #fff}
+.track{display:flex;height:100%;will-change:transform}
+.track.anim{transition:transform var(--slide,420ms) cubic-bezier(.22,.7,.2,1)}
+.slide{position:relative;flex:0 0 100%;height:100%;display:grid;place-items:center;overflow:hidden}
+.slide img{width:100%;height:100%;object-fit:contain;display:block;opacity:0;transition:opacity .5s ease;-webkit-user-drag:none;pointer-events:none}
+.slide img.ok{opacity:1}
+.slide .fail{position:absolute;inset:0;display:none;place-items:center;color:#55555b;font-size:12px;letter-spacing:.2em}
+.slide.err .fail{display:grid}
+/* 아직 열리지 않은 CG */
+.slide.lock{background:#0b0b0d repeating-linear-gradient(135deg,transparent 0 9px,rgba(255,255,255,.035) 9px 10px)}
+.slide.lock::after{content:attr(data-lock);font-family:var(--logo);font-weight:700;font-size:clamp(13px,2.4vw,20px);letter-spacing:.5em;padding-left:.5em;color:#4a4a50}
+
+/* 좌우 넘김 단추 */
+.nav{position:absolute;top:50%;z-index:3;width:30px;height:46px;margin-top:-23px;padding:0;border:0;border-radius:0;background:var(--w-face);box-shadow:var(--out);display:grid;place-items:center;cursor:pointer;opacity:.0;transition:opacity .2s}
+.nav svg{width:10px;height:14px;fill:#000}
+.nav:active:not(:disabled){box-shadow:var(--in)}
+.nav:disabled svg{fill:var(--w-sh)}
+.nav:focus-visible{opacity:1;outline:1px dotted #000;outline-offset:-5px}
+.nav.l{left:8px}.nav.r{right:8px}
+.view:hover .nav{opacity:.92}
+@media (hover:none){.nav{opacity:.8;width:26px;height:40px;margin-top:-20px}}
+
+/* ── 상태 표시줄 ── */
+.status{display:flex;gap:2px;margin-top:2px;height:22px}
+.status span{display:flex;align-items:center;padding:0 7px;box-shadow:inset 1px 1px var(--w-sh),inset -1px -1px var(--w-hi);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.status .no{flex:none;font-weight:800;letter-spacing:.04em}
+.status .cap{flex:1;min-width:0;display:block;line-height:22px}
+.status .cnt{flex:none;font-variant-numeric:tabular-nums;letter-spacing:.06em}
+
+/* ── 작은 그림 줄 ── */
+.thumbs{margin-top:2px;padding:4px;background:#000;box-shadow:var(--sunk);display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#808080 #1b1b1d;scroll-behavior:smooth}
+.thumbs::-webkit-scrollbar{height:12px}
+.thumbs::-webkit-scrollbar-track{background:#1b1b1d}
+.thumbs::-webkit-scrollbar-thumb{background:var(--w-face);box-shadow:var(--out)}
+.th{flex:0 0 auto;width:96px;aspect-ratio:var(--ratio);padding:0;border:0;border-radius:0;background:#111 center/cover no-repeat;position:relative;cursor:pointer;opacity:.45;transition:opacity .2s}
+.th:hover{opacity:.8}
+.th.on{opacity:1;outline:2px solid #fff;outline-offset:-2px}
+.th.on::after{content:"";position:absolute;inset:2px;box-shadow:inset 0 0 0 1px #000}
+.th:focus-visible{outline:1px dotted #fff;outline-offset:-4px}
+.th.lock{background:#0b0b0d repeating-linear-gradient(135deg,transparent 0 5px,rgba(255,255,255,.05) 5px 6px)}
+.th.lock::before{content:"?";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--logo);font-weight:700;font-size:16px;color:#4a4a50}
+.th i{position:absolute;left:3px;bottom:2px;font-style:normal;font-size:10px;font-weight:800;color:#fff;text-shadow:0 0 2px #000,0 0 2px #000}
+
+@media (max-width:520px){
+  .th{width:68px}
+  .status .cap{font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){ .track.anim{transition-duration:1ms} .slide img{transition:none} }
+</style>
+</head>
+<body>
+<div class="win" id="win">
+  <div class="tt">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3h14v10H1z" fill="#fff"/><path d="M1 3h14v10H1z" fill="none" stroke="#000"/><path d="M2 12l4-5 3 3 2-2 3 4z" fill="#808080"/><circle cx="11.5" cy="6" r="1.3" fill="#000"/></svg>
+    <span class="nm" id="nm"></span>
+    <span class="rate" id="rate"></span>
+  </div>
+  <div class="view">
+    <div class="stage" id="stage" tabindex="0" role="region" aria-roledescription="carousel" aria-label="CG 모음">
+      <div class="track" id="track"></div>
+    </div>
+    <button class="nav l" id="prev" aria-label="이전 CG"><svg viewBox="0 0 10 14"><path d="M8 0v14L1 7z"/></svg></button>
+    <button class="nav r" id="next" aria-label="다음 CG"><svg viewBox="0 0 10 14"><path d="M2 0v14l7-7z"/></svg></button>
+  </div>
+  <div class="status" aria-live="polite">
+    <span class="no" id="no"></span>
+    <span class="cap" id="cap"></span>
+    <span class="cnt" id="cnt"></span>
+  </div>
+  <div class="thumbs" id="thumbs" role="tablist" aria-label="CG 목록"></div>
+</div>
+
+<script>
+/* ════════════ 설정 (여기만 고치면 됩니다) ════════════ */
+const SET = {
+  title: 'CG鑑賞 ─ 澪標',      // 창 맨 위 제목
+  showRate: true,             // 제목 줄 오른쪽 「開放 5/6」 표시. 끄려면 false
+  lockText: '未 開 放',        // 잠긴 CG(lock:true)에 뜨는 글
+  ratio: '3 / 2',             // 보기 화면 가로:세로. 그림이 1216×832 라서 3:2. 정사각형이면 '1 / 1'
+  slide: 420,                 // 넘어가는 시간(1000 = 1초). 0이면 바로 바뀜
+  loop: true,                 // 마지막에서 다음 → 처음으로. 끄려면 false
+  maxW: 0,                    // 창 최대 너비(px). 0이면 칸 너비에 꽉 맞춤
+  noSave: true,               // 그림 우클릭·길게 눌러 저장·끌어 놓기 가볍게 막기. 끄려면 false
+  cursor: { url:'img/cursor-butterfly.png', x:39, y:42 },   // 위젯 안 마우스 커서(게임과 같은 나비). 끄려면 url:''
+  embedSignal: true           // 러브로그에 위젯 높이를 알려 줘서 칸 높이가 자동으로 맞춰짐. 끄려면 false
+};
+
+/* ════════════ CG 목록 ════════════
+   한 줄 = 그림 한 장. 순서대로 보입니다.
+   src   : 그림 주소 (저장소 img 폴더면 'img/파일이름.jpg', 바깥 주소면 https://… 통째로)
+   title : 아래 상태 줄에 뜨는 이름
+   note  : 이름 옆 작은 설명 (없으면 '' )
+   lock  : true 면 그림 대신 「未 開 放」 칸 (나중에 열 CG 자리). 없으면 빼도 됨
+   ※ 줄 끝 쉼표(,) 꼭 남기기 */
+const CG = [
+  { src:'img/title.jpg',        title:'澪標',        note:'タイトル' },
+  { src:'img/genkan.jpg',       title:'현관',         note:'11월 3일 (화)' },
+  { src:'img/living.jpg',       title:'거실',         note:'' },
+  { src:'img/piano.jpg',        title:'디지털 피아노', note:'' },
+  { src:'img/living-empty.jpg', title:'거실',         note:'── 아무도 없다' },
+  { src:'', title:'？？？', note:'', lock:true },
+];
+/* ════════════ 여기부터는 고치지 않아도 됩니다 ════════════ */
+
+const $ = id => document.getElementById(id);
+const root = document.documentElement;
+root.style.setProperty('--ratio', SET.ratio);
+root.style.setProperty('--slide', Math.max(0, SET.slide|0) + 'ms');
+if (SET.maxW > 0) root.style.setProperty('--maxw', SET.maxW + 'px');
+if (SET.cursor && SET.cursor.url){
+  const st = document.createElement('style');
+  st.textContent = `*{cursor:url('${SET.cursor.url}') ${SET.cursor.x|0} ${SET.cursor.y|0},auto!important}`;
+  document.head.appendChild(st);
+}
+$('nm').textContent = SET.title;
+
+const N = CG.length;
+const open = CG.filter(c => !c.lock && c.src).length;
+if (SET.showRate && N) $('rate').textContent = `開放 ${open}/${N}`;
+const pad = n => String(n).padStart(2, '0');
+
+/* 슬라이드·작은 그림 만들기 */
+const slides = [], thumbs = [];
+CG.forEach((c, i) => {
+  const s = document.createElement('div');
+  s.className = 'slide';
+  s.setAttribute('role', 'group');
+  s.setAttribute('aria-label', `${i+1} / ${N}: ${c.title || ''}`);
+  if (c.lock || !c.src){ s.classList.add('lock'); s.dataset.lock = SET.lockText; }
+  else {
+    const im = new Image();
+    im.alt = c.title || '';
+    im.decoding = 'async';
+    im.draggable = false;
+    im.onload = () => im.classList.add('ok');
+    im.onerror = () => s.classList.add('err');
+    s.appendChild(im);
+    const f = document.createElement('div'); f.className = 'fail'; f.textContent = 'NO IMAGE'; s.appendChild(f);
+    s._img = im; s._src = c.src;
+  }
+  $('track').appendChild(s); slides.push(s);
+
+  const t = document.createElement('button');
+  t.className = 'th' + (c.lock || !c.src ? ' lock' : '');
+  t.setAttribute('role', 'tab');
+  t.setAttribute('aria-label', `${i+1}번 ${c.title || ''}`);
+  if (!(c.lock || !c.src)) t._bg = c.src;
+  t.innerHTML = `<i>${pad(i+1)}</i>`;
+  t.addEventListener('click', () => go(i));
+  $('thumbs').appendChild(t); thumbs.push(t);
+});
+
+/* 보이는 칸 근처만 불러오기 (처음 여는 속도) */
+function load(i){
+  const s = slides[i];
+  if (s && s._img && !s._img.src) s._img.src = s._src;
+}
+function loadThumbs(){
+  thumbs.forEach(t => { if (t._bg) t.style.backgroundImage = `url("${t._bg}")`; });
+}
+
+let cur = 0;
+const W = () => $('stage').clientWidth;
+function place(anim, dx = 0){
+  const tr = $('track');
+  tr.classList.toggle('anim', !!anim && SET.slide > 0);
+  tr.style.transform = `translate3d(${-cur * W() + dx}px,0,0)`;
+}
+function go(i, anim = true){
+  if (!N) return;
+  if (SET.loop) i = (i + N) % N; else i = Math.max(0, Math.min(N - 1, i));
+  cur = i;
+  place(anim);
+  [i, i+1, i-1].forEach(k => load((k + N) % N));
+  const c = CG[i];
+  $('no').textContent = 'No.' + pad(i + 1);
+  $('cap').textContent = (c.lock || !c.src) ? SET.lockText.replace(/\s/g,'') : (c.title || '') + (c.note ? '　' + c.note : '');
+  $('cnt').textContent = pad(i + 1) + ' / ' + pad(N);
+  thumbs.forEach((t, k) => { t.classList.toggle('on', k === i); t.setAttribute('aria-selected', k === i); });
+  /* 작은 그림 줄 안에서만 스크롤 (바깥 페이지는 움직이지 않음) */
+  const t = thumbs[i], box = $('thumbs');
+  const l = t.offsetLeft - box.clientWidth / 2 + t.offsetWidth / 2;
+  box.scrollTo({ left: Math.max(0, l), behavior: anim ? 'smooth' : 'auto' });
+  $('prev').disabled = !SET.loop && i === 0;
+  $('next').disabled = !SET.loop && i === N - 1;
+}
+$('prev').addEventListener('click', () => go(cur - 1));
+$('next').addEventListener('click', () => go(cur + 1));
+$('stage').addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft'){ e.preventDefault(); go(cur - 1); }
+  else if (e.key === 'ArrowRight'){ e.preventDefault(); go(cur + 1); }
+  else if (e.key === 'Home'){ e.preventDefault(); go(0); }
+  else if (e.key === 'End'){ e.preventDefault(); go(N - 1); }
+});
+
+/* 끌어서·밀어서 넘기기 — 가로로 밀 때만 넘기고, 세로로 밀면 페이지 스크롤에 양보 */
+(() => {
+  const st = $('stage');
+  let id = null, x0 = 0, y0 = 0, t0 = 0, dx = 0, mode = '';
+  st.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    id = e.pointerId; x0 = e.clientX; y0 = e.clientY; t0 = performance.now(); dx = 0; mode = '';
+  });
+  st.addEventListener('pointermove', e => {
+    if (e.pointerId !== id) return;
+    const mx = e.clientX - x0, my = e.clientY - y0;
+    if (!mode){
+      if (Math.abs(mx) < 6 && Math.abs(my) < 6) return;
+      mode = Math.abs(mx) > Math.abs(my) ? 'x' : 'y';
+      if (mode === 'x'){ try { st.setPointerCapture(id); } catch(_){} st.classList.add('drag'); }
+    }
+    if (mode !== 'x') return;
+    dx = mx;
+    const edge = !SET.loop && ((cur === 0 && dx > 0) || (cur === N - 1 && dx < 0));
+    place(false, edge ? dx * .3 : dx);
+  });
+  const end = e => {
+    if (e.pointerId !== id) return;
+    id = null; st.classList.remove('drag');
+    if (mode !== 'x'){ mode = ''; return; }
+    const v = dx / Math.max(1, performance.now() - t0);
+    if (dx < -W() * .18 || v < -.45) go(cur + 1);
+    else if (dx > W() * .18 || v > .45) go(cur - 1);
+    else place(true);
+    mode = '';
+  };
+  st.addEventListener('pointerup', end);
+  st.addEventListener('pointercancel', end);
+  st.addEventListener('dragstart', e => e.preventDefault());
+})();
+
+if (SET.noSave){
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  root.style.webkitTouchCallout = 'none';
+}
+
+/* 크기가 바뀌면 같은 칸에 바로 맞춤 + 러브로그에 높이 알림 */
+let lastH = 0;
+function signal(){
+  if (!SET.embedSignal || parent === window) return;
+  const h = Math.ceil($('win').getBoundingClientRect().height);
+  if (h && h !== lastH){ lastH = h; try { parent.postMessage({ lvEmbedH: h }, '*'); } catch(_){} }
+}
+new ResizeObserver(() => { place(false); signal(); }).observe(document.body);
+addEventListener('load', () => { loadThumbs(); signal(); });
+go(0, false);
+setTimeout(loadThumbs, 600);
+</script>
+</body>
+</html>
