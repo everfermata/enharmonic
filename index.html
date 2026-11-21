@@ -55,7 +55,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:transparent;color:var(
 @keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 /* 시작·끝 화면 (검은 화면창 안) */
 .scr{position:absolute;inset:0;z-index:5;background:linear-gradient(90deg,#070708 1px,transparent 1px) 0 0/4px 4px,linear-gradient(#070708 1px,transparent 1px) 0 0/4px 4px,rgba(24,24,26,.96);color:var(--lit);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
-.scr[hidden]{display:none}
+.scr[hidden]{display:none !important} /* 넓은 화면(홈)에서 #start{display:grid}가 숨김을 이기던 문제 수정 */
 .scr h1{margin:0;font-family:var(--mincho);font-weight:800;font-size:52px;letter-spacing:.14em;text-indent:.14em;line-height:1}
 .scr .sub{font-size:13px;letter-spacing:.08em;color:var(--mute)}
 .scr p{margin:0;max-width:300px;font-size:13px;line-height:1.75;color:#d2d2d4}
